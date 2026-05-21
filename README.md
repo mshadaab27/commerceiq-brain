@@ -7,7 +7,7 @@ A design prototype for a **Brain-like reasoning, memory, and learning layer** on
 
 The Brain's complexity stays behind the scenes; the analyst sees one calm page with answers and trackable recommendations.
 
-> **🔗 Live demo:** _will be enabled on push_ — `https://mshadaab27.github.io/commerceiq-brain/`
+> **🔗 Live demo:** [mshadaab27.github.io/commerceiq-brain](https://mshadaab27.github.io/commerceiq-brain/)
 
 ---
 
