@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CommerceIQ · Ask</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./assets/styles.css">
+</head>
+<body class="surface-customer">
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a href="./index.html" class="brand"><div class="brand-mark">C</div> CommerceIQ</a>
+    <nav class="nav" aria-label="Primary">
+      <a href="./index.html">Briefing</a>
+      <a href="./ask.html" class="active">Ask</a>
+      <a href="./actions.html">Actions</a>
+    </nav>
+    <label class="search">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+      <input type="text" placeholder="Search SKUs, brands, alerts…">
+      <span class="kbd">⌘K</span>
+    </label>
+    <button type="button" class="iconbtn" aria-label="Notifications">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+      <span class="dot"></span>
+    </button>
+    <div class="avatar">SC</div>
+  </div>
+</header>
+
+<main class="page">
+
+  <section data-render="thread"></section>
+
+  <section class="ask-hero">
+    <h1>Ask anything about your business</h1>
+    <p>Why a SKU missed plan, what's driving a category trend, what to do about it. Your context, brands, and recent activity are already loaded.</p>
+  </section>
+
+  <section style="max-width:760px; margin: 0 auto;">
+    <form class="ask-input" onsubmit="event.preventDefault(); var v=this.querySelector('input').value; var m=v.match(/B[0-9A-Z]{9}/i); if (m) { window.location.href='./alert.html?id='+encodeURIComponent(m[0]); } else { window.location.href='./ask.html?thread=c1'; }" style="position:relative; box-shadow: var(--shadow-lg); padding: 8px 8px 8px 22px;">
+      <input type="text" class="input lg" style="border:0; padding: 14px 0; box-shadow: none;" placeholder="e.g. Why did CREAMi NC301 miss plan? What's driving the gap in outdoor grills?" autofocus>
+      <button type="submit" class="ask-send" style="width:42px; height:42px;" aria-label="Ask">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 7-7 7 7"/><path d="M12 19V5"/></svg>
+      </button>
+    </form>
+  </section>
+
+  <section class="suggestions" data-render="suggestions"></section>
+
+  <section class="section recent-list" data-render="recents"></section>
+
+</main>
+
+<script src="./assets/data.js"></script>
+<script src="./assets/render.js"></script>
+<script src="./assets/app.js"></script>
+</body>
+</html>

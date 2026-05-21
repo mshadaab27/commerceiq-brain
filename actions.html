@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CommerceIQ · Your actions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./assets/styles.css">
+</head>
+<body class="surface-customer">
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a href="./index.html" class="brand"><div class="brand-mark">C</div> CommerceIQ</a>
+    <nav class="nav">
+      <a href="./index.html">Briefing</a>
+      <a href="./ask.html">Ask</a>
+      <a href="./actions.html" class="active">Actions</a>
+    </nav>
+    <label class="search">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+      <input type="text" placeholder="Search SKUs, brands, alerts…">
+      <span class="kbd">⌘K</span>
+    </label>
+    <button class="iconbtn"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg></button>
+    <div class="avatar">SC</div>
+  </div>
+</header>
+
+<main class="page">
+  <section class="hero">
+    <div class="meta-row">
+      <span class="pulse-dot"></span>
+      <span class="greet">Your actions</span>
+      <span style="color:var(--ink-4)">·</span>
+      <span>Tracking impact against a synthetic baseline</span>
+    </div>
+    <h1>14 actions tracked. <span class="em">$1.8M</span> in cumulative recovered revenue.</h1>
+    <p class="sub">Every recommendation you accept is measured for 7–14 days against comparable SKUs. Below: what's in flight, what worked, and what changed our beliefs.</p>
+  </section>
+
+  <section class="section">
+    <div class="actions-stats">
+      <div class="stat"><div class="l">In flight</div><div class="v acc">3<span class="unit">actions</span></div></div>
+      <div class="stat"><div class="l">Measured this month</div><div class="v">11</div></div>
+      <div class="stat"><div class="l">Worked (≥5% lift)</div><div class="v pos">8 <span class="unit">/ 11</span></div></div>
+      <div class="stat"><div class="l">Recovered revenue</div><div class="v pos">+$1.8M</div></div>
+    </div>
+
+    <div class="section-head" style="margin-bottom:18px;">
+      <h2>In flight</h2>
+      <span class="count">3</span>
+      <div class="right" data-chip-group>
+        <button class="chip active">All status</button>
+        <button class="chip">All brands</button>
+        <button class="chip">Last 30 days</button>
+      </div>
+    </div>
+
+    <article class="action-card">
+      <div class="lh">
+        <div class="name">Fix promo deal badge</div>
+        <div class="meta">Ninja CREAMi Scoop &amp; Swirl<span class="asin">B0DSJW8SFG</span></div>
+        <span class="pill pill-pos">On track</span>
+        <p>The same fix pattern lifted comparable SKUs by 8–15% in 7 days. We're 4 days in. Current lift on OPS exceeds the lower bound and is trending toward the upper bound.</p>
+      </div>
+      <div class="chart">
+        <svg width="160" height="60" viewBox="0 0 160 60" fill="none">
+          <path d="M4 50 L22 47 L40 44 L58 38 L76 32 L94 26 L112 18 L130 12 L156 6" stroke="var(--pos)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="156" cy="6" r="3" fill="var(--pos)"/>
+          <path d="M4 50 L22 49 L40 48 L58 46 L76 44 L94 41 L112 38 L130 34 L156 30" stroke="var(--ink-4)" stroke-width="1.5" stroke-dasharray="3 3"/>
+        </svg>
+        <div class="legend">
+          Actual lift
+          <span class="v pos">+9.2%</span>
+        </div>
+      </div>
+      <div class="progress-wrap">
+        <div class="lbl"><span>Day 4 / 7</span><span>57%</span></div>
+        <div class="bar" style="height:6px; background:var(--line); border-radius:3px; overflow:hidden;"><i style="display:block; height:100%; width:57%; background:linear-gradient(90deg,var(--accent),var(--sky))"></i></div>
+      </div>
+    </article>
+
+    <article class="action-card">
+      <div class="lh">
+        <div class="name">Reactivate Matching event price</div>
+        <div class="meta">Ninja CREAMi NC301<span class="asin">B08QXB9BH5</span></div>
+        <span class="pill pill-warn">Measuring</span>
+        <p>Synthetic baseline built from 12 donor SKUs. We'll have a meaningful read by day 4. Early signal: glance views are returning.</p>
+      </div>
+      <div class="chart">
+        <svg width="160" height="60" viewBox="0 0 160 60" fill="none">
+          <path d="M4 38 L22 36" stroke="var(--ink-3)" stroke-width="2" stroke-linecap="round"/>
+          <circle cx="22" cy="36" r="3" fill="var(--accent)"/>
+          <path d="M22 36 L156 30" stroke="var(--ink-4)" stroke-width="1.5" stroke-dasharray="3 3"/>
+        </svg>
+        <div class="legend">Actual lift<span class="v">— measuring</span></div>
+      </div>
+      <div class="progress-wrap">
+        <div class="lbl"><span>Day 1 / 7</span><span>14%</span></div>
+        <div class="bar" style="height:6px; background:var(--line); border-radius:3px; overflow:hidden;"><i style="display:block; height:100%; width:14%; background:linear-gradient(90deg,var(--accent),var(--sky))"></i></div>
+      </div>
+    </article>
+
+    <article class="action-card">
+      <div class="lh">
+        <div class="name">Boost ad spend on P0 keywords</div>
+        <div class="meta">Ninja FlexFlame ProConnect<span class="asin">B0GHPM2C3Y</span></div>
+        <span class="pill pill-info">Measured · 14d</span>
+        <p>Closed loop. Synthetic control showed +11.3% OPS vs comparable SKUs. <strong style="color:var(--accent)">Brain belief updated:</strong> media→OPS link strengthened by +0.07 (n=14 obs).</p>
+      </div>
+      <div class="chart">
+        <svg width="160" height="60" viewBox="0 0 160 60" fill="none">
+          <path d="M4 50 L18 47 L32 49 L48 44 L64 40 L80 36 L96 32 L116 24 L138 16 L156 8" stroke="var(--pos)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="156" cy="8" r="3" fill="var(--pos)"/>
+        </svg>
+        <div class="legend">Actual lift<span class="v pos">+11.3%</span></div>
+      </div>
+      <div class="progress-wrap">
+        <div class="lbl"><span>Day 14 / 14</span><span>Closed</span></div>
+        <div class="bar" style="height:6px; background:var(--line); border-radius:3px; overflow:hidden;"><i style="display:block; height:100%; width:100%; background:linear-gradient(90deg,var(--pos),var(--sky))"></i></div>
+      </div>
+    </article>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <h2>Recently measured</h2>
+      <span class="count">11 this month</span>
+      <div class="right"><button class="chip">Export</button></div>
+    </div>
+    <div class="table-wrap" style="margin-top:14px;">
+      <table class="table">
+        <thead><tr><th>Action</th><th>SKU</th><th>Predicted</th><th>Measured</th><th>Method</th><th>Result</th></tr></thead>
+        <tbody>
+          <tr><td>Fix deal badge</td><td class="mono">B0DSJW8SFG</td><td>+8–15%</td><td class="pos tabular">+11.4%</td><td>Synthetic control</td><td><span class="pill pill-pos">Worked</span></td></tr>
+          <tr><td>Increase ad spend, P0 kws</td><td class="mono">B0GHPM2C3Y</td><td>+6%</td><td class="pos tabular">+11.3%</td><td>Synthetic control</td><td><span class="pill pill-pos">Worked</span></td></tr>
+          <tr><td>Restore promo on parent ASIN</td><td class="mono">B07YT83K4Z</td><td>+10%</td><td class="pos tabular">+14.8%</td><td>Pre/post trend</td><td><span class="pill pill-pos">Worked</span></td></tr>
+          <tr><td>Match competitor price</td><td class="mono">B09HQR2X4N</td><td>+5%</td><td class="neg tabular">−2.1%</td><td>Synthetic control</td><td><span class="pill" style="background:var(--neg-tint); color:var(--neg);">Did not work</span></td></tr>
+          <tr><td>Add A+ content</td><td class="mono">B0CRSPK22</td><td>+4%</td><td class="pos tabular">+3.9%</td><td>Pre/post simple</td><td><span class="pill pill-pos">Worked</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+</main>
+
+<script src="./assets/app.js"></script>
+</body>
+</html>

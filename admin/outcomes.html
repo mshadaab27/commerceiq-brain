@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Outcomes · Brain admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body class="surface-admin">
+
+<header class="topbar">
+  <div class="topbar-inner" style="max-width:none">
+    <a href="../index.html" class="brand"><div class="brand-mark electric">B</div> Brain <span style="font-weight:400; color:var(--ink-3); margin-left:6px;">admin</span></a>
+    <span style="font-size:11px; color:var(--ink-3); font-family:var(--mono); margin-left:8px;">v0.1</span>
+    <div style="margin-left:auto; display:flex; align-items:center; gap:8px;">
+      <span class="chip" style="background:var(--accent-tint); color:var(--accent);">SharkNinja</span>
+      <a href="../index.html" class="btn ghost sm">← Customer view</a>
+    </div>
+  </div>
+</header>
+
+<div class="admin-layout">
+  <aside class="sidenav">
+    <div class="section-label">Brain</div>
+    <a href="./index.html">Overview</a>
+    <div class="section-label">Knowledge</div>
+    <a href="./memory.html"><span class="layer-num">L1</span> Memory <span class="badge">2.4k</span></a>
+    <div class="section-label">Authoring</div>
+    <a href="./composer.html"><span class="layer-num">L2</span> Composer <span class="badge">12</span></a>
+    <a href="./studio.html"><span class="layer-num">L2</span> Skill Studio <span class="badge">7</span></a>
+    <div class="section-label">Run-time</div>
+    <a href="./orchestrate.html"><span class="layer-num">L3</span> Orchestrate <span class="badge">218/d</span></a>
+    <a href="./outcomes.html" class="active"><span class="layer-num">L5</span> Outcomes <span class="badge">14</span></a>
+    <a href="./adapt.html"><span class="layer-num">L6</span> Adapt <span class="badge">3</span></a>
+  </aside>
+
+  <main class="admin-main">
+    <header class="admin-head">
+      <div>
+        <div class="meta">L5 · Outcome tracking</div>
+        <h1>Outcomes</h1>
+        <p>The loop that makes the Brain smarter. Every recommendation a customer accepts is logged with predicted impact, baseline metrics, and a measurement method — then the Brain measures the actual lift and feeds the result back into the causal graph.</p>
+      </div>
+      <div class="right">
+        <button class="btn ghost">Methodology</button>
+      </div>
+    </header>
+
+    <div class="actions-stats" style="margin-bottom:24px;">
+      <div class="stat"><div class="l">In flight</div><div class="v acc">14</div></div>
+      <div class="stat"><div class="l">Worked rate</div><div class="v pos">62%</div></div>
+      <div class="stat"><div class="l">Cumulative recovered $</div><div class="v pos">$1.8M</div></div>
+      <div class="stat"><div class="l">Belief updates</div><div class="v">28<span class="unit">this mo</span></div></div>
+    </div>
+
+    <div class="section-head"><h2>Action log</h2><span class="count">last 30 days</span>
+      <div class="right" data-chip-group>
+        <button class="chip active">All status</button>
+        <button class="chip">In flight</button>
+        <button class="chip">Measured</button>
+        <button class="chip">Did not work</button>
+      </div>
+    </div>
+    <div class="table-wrap" style="margin-top:14px;">
+      <table class="table">
+        <thead><tr><th>Taken</th><th>Action</th><th>SKU</th><th>Tenant</th><th>Method</th><th>Predicted</th><th>Measured</th><th>Belief Δ</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">May 17</td><td>Fix deal badge</td><td class="mono">B0DSJW8SFG</td><td>SharkNinja</td><td>Synthetic control · 12 donors</td><td>+8–15%</td><td class="pos tabular">+9.2%</td><td class="acc mono">+0.07</td><td><span class="pill pill-warn">Day 4 / 7</span></td></tr>
+          <tr><td class="mono">May 20</td><td>Reactivate Matching event</td><td class="mono">B08QXB9BH5</td><td>SharkNinja</td><td>Synthetic control · 9 donors</td><td>+8–15%</td><td class="mono">measuring</td><td class="mono">—</td><td><span class="pill pill-warn">Day 1 / 7</span></td></tr>
+          <tr><td class="mono">May 7</td><td>Boost ad spend (P0 kw)</td><td class="mono">B0GHPM2C3Y</td><td>SharkNinja</td><td>Synthetic control · 14 donors</td><td>+6%</td><td class="pos tabular">+11.3%</td><td class="acc mono">+0.07</td><td><span class="pill pill-pos">Measured</span></td></tr>
+          <tr><td class="mono">May 6</td><td>Restore parent ASIN promo</td><td class="mono">B07YT83K4Z</td><td>SharkNinja</td><td>Pre/post trend</td><td>+10%</td><td class="pos tabular">+14.8%</td><td class="acc mono">+0.05</td><td><span class="pill pill-pos">Measured</span></td></tr>
+          <tr><td class="mono">May 5</td><td>Match competitor price</td><td class="mono">B09HQR2X4N</td><td>SharkNinja</td><td>Synthetic control · 11 donors</td><td>+5%</td><td class="neg tabular">−2.1%</td><td class="mono" style="color:var(--neg)">−0.04</td><td><span class="pill" style="background:var(--neg-tint); color:var(--neg);">Did not work</span></td></tr>
+          <tr><td class="mono">May 1</td><td>Add A+ content</td><td class="mono">B0CRSPK22</td><td>SharkNinja</td><td>Pre/post simple</td><td>+4%</td><td class="pos tabular">+3.9%</td><td class="acc mono">+0.02</td><td><span class="pill pill-pos">Measured</span></td></tr>
+          <tr><td class="mono">Apr 28</td><td>Replenish inventory</td><td class="mono">B0HQ8KJ4</td><td>P&amp;G</td><td>Synthetic control · 8 donors</td><td>+7%</td><td class="pos tabular">+8.4%</td><td class="acc mono">+0.03</td><td><span class="pill pill-pos">Measured</span></td></tr>
+          <tr><td class="mono">Apr 25</td><td>Update title keyword</td><td class="mono">B0LMNQ3T</td><td>Unilever</td><td>Pre/post trend</td><td>+3%</td><td class="pos tabular">+4.1%</td><td class="acc mono">+0.01</td><td><span class="pill pill-pos">Measured</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <section style="margin-top:32px;">
+      <div class="section-head"><h2>Methodology audit · a single action</h2></div>
+      <div class="panel-card" style="margin-top:14px;">
+        <h3>Action #18173 · fix_deal_badge</h3>
+        <h2 style="font-size:16px;">Ninja CREAMi Scoop &amp; Swirl · B0DSJW8SFG · SharkNinja</h2>
+        <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:16px; margin-top:20px;">
+          <div>
+            <div class="help">Predicted lift (band)</div>
+            <div style="font-weight:700; font-size:18px; margin-top:4px;" class="pos">+8 – 15%</div>
+            <div style="font-size:12px; color:var(--ink-3); margin-top:6px;">Derived from learned strength of <strong>deal_badge_present → ops</strong> edge in KG.</div>
+          </div>
+          <div>
+            <div class="help">Counterfactual method</div>
+            <div style="font-weight:700; font-size:16px; margin-top:4px;">Synthetic control</div>
+            <div style="font-size:12px; color:var(--ink-3); margin-top:6px;">12 donor SKUs with similar pre-period OPS trajectory and no deal-badge fix in window.</div>
+          </div>
+          <div>
+            <div class="help">Significance</div>
+            <div style="font-weight:700; font-size:18px; margin-top:4px;" class="pos">p=0.04</div>
+            <div style="font-size:12px; color:var(--ink-3); margin-top:6px;">Permutation test · 10,000 reshuffles · day 4 of 7.</div>
+          </div>
+        </div>
+        <hr style="margin:24px 0">
+        <div class="help">Donor pool</div>
+        <div class="code mono" style="margin-top:6px;">B0DSJW9AAA, B0DSJW8XYZ, B07YT83K4Z, B0CRSPK22, B09P2VYY, B0F8N4WW, B0G2XKQR, B0HRTJ5Z, B0K3MWQ8, B0LP3SD1, B0M9VVK4, B0NRQXSA</div>
+        <p style="font-size:12px; color:var(--ink-3); margin-top:10px;">Donor weights computed via constrained regression on the pre-period window. Pool quality score: <strong>0.91</strong>.</p>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script src="../assets/app.js"></script>
+</body>
+</html>

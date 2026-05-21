@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Composer · Brain admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body class="surface-admin">
+
+<header class="topbar">
+  <div class="topbar-inner" style="max-width: none;">
+    <a href="../index.html" class="brand"><div class="brand-mark electric">B</div> Brain <span style="font-weight:400; color:var(--ink-3); margin-left:6px;">admin</span></a>
+    <span style="font-size:11px; color:var(--ink-3); font-family:var(--mono); margin-left:8px;">v0.1 · commerceiq</span>
+    <div style="margin-left:auto; display:flex; align-items:center; gap:8px;">
+      <span class="chip" style="background:var(--accent-tint); color:var(--accent);">SharkNinja</span>
+      <a href="../index.html" class="btn ghost sm">← Customer view</a>
+    </div>
+  </div>
+</header>
+
+<div class="admin-layout">
+
+  <aside class="sidenav">
+    <div class="section-label">Brain</div>
+    <a href="./index.html"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg> Overview</a>
+    <div class="section-label">Knowledge</div>
+    <a href="./memory.html"><span class="layer-num">L1</span> Memory <span class="badge">2.4k</span></a>
+    <div class="section-label">Authoring</div>
+    <a href="./composer.html" class="active"><span class="layer-num">L2</span> Composer <span class="badge">12</span></a>
+    <a href="./studio.html"><span class="layer-num">L2</span> Skill Studio <span class="badge">7</span></a>
+    <div class="section-label">Run-time</div>
+    <a href="./orchestrate.html"><span class="layer-num">L3</span> Orchestrate <span class="badge">218/d</span></a>
+    <a href="./outcomes.html"><span class="layer-num">L5</span> Outcomes <span class="badge">14</span></a>
+    <a href="./adapt.html"><span class="layer-num">L6</span> Adapt <span class="badge">3</span></a>
+  </aside>
+
+  <main class="admin-main">
+
+    <header class="admin-head">
+      <div>
+        <div class="meta">L2 · Authoring</div>
+        <h1>Composer</h1>
+        <p>Describe a new analysis in plain English. The Brain drafts the use case, the SQL, the constraint rules, and the structured output. You review and publish. No engineering hand-off.</p>
+      </div>
+      <div class="right">
+        <button class="chip">Drafts <span class="badge" style="margin-left:6px; background:white;">12</span></button>
+      </div>
+    </header>
+
+    <!-- Wizard steps -->
+    <div class="wizard-steps">
+      <div class="step-pill active" data-step-pill="1"><span class="n">1</span> Describe</div>
+      <svg class="icon wizard-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg>
+      <div class="step-pill" data-step-pill="2"><span class="n">2</span> Review draft</div>
+      <svg class="icon wizard-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg>
+      <div class="step-pill" data-step-pill="3"><span class="n">3</span> Scope &amp; publish</div>
+    </div>
+
+    <!-- STEP 1 -->
+    <section data-step="1" class="panel-card">
+      <h3>Step 1 · Describe</h3>
+      <h2>What analysis do you want the agent to run?</h2>
+      <p style="color:var(--ink-3); margin-top:4px; font-size:13px;">Be specific about the trigger, the data, the time window, and what the output should highlight.</p>
+
+      <div class="form-row" style="margin-top:24px;">
+        <label class="form-label">Describe the use case</label>
+        <textarea class="textarea" style="min-height:140px;">Flag SKUs whose organic keyword rank dropped 5+ positions on a keyword we spent &gt;$1,000 on last week. Compare last complete week vs the prior complete week. Group by SKU and surface the top 5 keywords per SKU.</textarea>
+        <span class="help">Tip: include the trigger ("when X happens"), the data ("compare A vs B"), and the grouping.</span>
+      </div>
+
+      <div class="form-row">
+        <label class="form-label">When should this fire?</label>
+        <div style="display:flex; gap:8px; flex-wrap:wrap;" data-chip-group>
+          <button class="chip active">User asks</button>
+          <button class="chip">Daily 8am</button>
+          <button class="chip">When threshold hits</button>
+          <button class="chip">Inside RCA workflow</button>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <label class="form-label">Reference these existing use cases (optional)</label>
+        <select class="select">
+          <option>MEDIA_IMPACT_SIGNAL — base for keyword + spend logic</option>
+          <option>OPS_WOW_DRIVERS — base for WoW comparison</option>
+          <option>None — start from scratch</option>
+        </select>
+        <span class="help">The Composer borrows shape and constraint rules from references when possible.</span>
+      </div>
+
+      <div style="display:flex; gap:8px; justify-content:flex-end; margin-top:20px;">
+        <button class="btn ghost">Save as draft</button>
+        <button class="btn accent" data-step-next="1" data-generate>
+          Generate draft
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+        </button>
+      </div>
+    </section>
+
+    <!-- STEP 2 -->
+    <section data-step="2" hidden>
+      <div style="display:grid; grid-template-columns: 1.4fr 1fr; gap: 20px;">
+        <div>
+          <div class="panel-card">
+            <h3>Step 2a · Use case shell</h3>
+            <div class="form-row">
+              <label class="form-label">Key</label>
+              <input class="input mono" value="KEYWORD_RANK_DROP_HIGH_SPEND">
+            </div>
+            <div class="form-row">
+              <label class="form-label">Description</label>
+              <textarea class="textarea">Identifies SKUs whose top organic keyword rank dropped 5+ positions WoW for keywords with last-week spend &gt; $1,000. Returns top 5 affected keywords per SKU with WoW spend and rank deltas.</textarea>
+            </div>
+            <div class="form-row">
+              <label class="form-label">Triggers</label>
+              <textarea class="textarea" style="min-height:64px;">user asks about keyword rank loss; user mentions "rank drop" together with "high spend" keywords; user asks why traffic dropped for a SKU.</textarea>
+            </div>
+          </div>
+
+          <div class="panel-card" style="margin-top:16px;">
+            <h3>Step 2b · SQL (auto-drafted)</h3>
+            <div class="code"><span class="cmt">-- auto-drafted from query planner; runs in Databricks SQL</span>
+<span class="kw">WITH</span> kw_spend <span class="kw">AS</span> (
+  <span class="kw">SELECT</span> sku, keyword, week_start,
+         <span class="fn">SUM</span>(spend) <span class="kw">AS</span> spend
+  <span class="kw">FROM</span> client_catalog.amazon.search_term_spend
+  <span class="kw">WHERE</span> client_id = {{client_id}}
+    <span class="kw">AND</span> retailer_id = <span class="num">4</span>
+    <span class="kw">AND</span> week_start <span class="kw">BETWEEN</span> {{prev_start}} <span class="kw">AND</span> {{curr_end}}
+  <span class="kw">GROUP BY</span> <span class="num">1</span>,<span class="num">2</span>,<span class="num">3</span>
+),
+rank_wow <span class="kw">AS</span> (
+  <span class="kw">SELECT</span> sku, keyword,
+         <span class="fn">MAX</span>(<span class="kw">IF</span>(week_start = {{prev_start}}, org_rank)) <span class="kw">AS</span> prev_rank,
+         <span class="fn">MAX</span>(<span class="kw">IF</span>(week_start = {{curr_start}}, org_rank)) <span class="kw">AS</span> curr_rank
+  <span class="kw">FROM</span> client_catalog.amazon.keyword_rank
+  <span class="kw">WHERE</span> client_id = {{client_id}}
+  <span class="kw">GROUP BY</span> <span class="num">1</span>,<span class="num">2</span>
+)
+<span class="kw">SELECT</span> r.sku, r.keyword,
+       k.spend,
+       (r.curr_rank - r.prev_rank) <span class="kw">AS</span> rank_delta,
+       r.prev_rank, r.curr_rank
+<span class="kw">FROM</span> rank_wow r
+<span class="kw">JOIN</span> kw_spend k <span class="kw">ON</span> k.sku = r.sku <span class="kw">AND</span> k.keyword = r.keyword
+<span class="kw">WHERE</span> k.spend &gt; <span class="num">1000</span>
+  <span class="kw">AND</span> (r.curr_rank - r.prev_rank) &gt;= <span class="num">5</span>
+<span class="kw">ORDER BY</span> rank_delta <span class="kw">DESC</span>
+<span class="kw">LIMIT</span> <span class="num">200</span>;</div>
+            <div style="display:flex; gap:8px; margin-top:14px; align-items:center;">
+              <button class="btn ghost sm">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                Validate · 100 sample rows
+              </button>
+              <span class="pill pill-pos" style="font-size:10px;">✔ syntax valid</span>
+              <span class="pill pill-pos" style="font-size:10px;">✔ tenant-isolated</span>
+              <span style="font-size:11px; color:var(--ink-3); margin-left:auto;" class="mono">est. 1.4s, 12 rows</span>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="panel-card">
+            <h3>Step 2c · Constraint rules</h3>
+            <p style="font-size:13px; color:var(--ink-3); margin-bottom:14px;">3 rules drafted. You can edit or add more.</p>
+            <div style="display:flex; flex-direction:column; gap:12px;">
+              <div style="padding:14px; border:1px solid var(--line); border-radius: var(--r-md); background:var(--bg-soft);">
+                <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
+                  <span class="pill pill-info" style="font-size:10px;">DATA</span>
+                  <strong style="font-size:13px;">Week alignment</strong>
+                </div>
+                <p style="font-size:12px; color:var(--ink-3);">Use Sunday–Saturday weeks. Compare last complete week vs prior complete week.</p>
+              </div>
+              <div style="padding:14px; border:1px solid var(--line); border-radius: var(--r-md); background:var(--bg-soft);">
+                <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
+                  <span class="pill" style="font-size:10px; background:var(--warn-tint); color:var(--warn);">ANALYSIS</span>
+                  <strong style="font-size:13px;">Threshold</strong>
+                </div>
+                <p style="font-size:12px; color:var(--ink-3);">A rank drop is meaningful only when prior_rank ≤ 30 AND drop ≥ 5 positions. Filter out from rank 50+.</p>
+              </div>
+              <div style="padding:14px; border:1px solid var(--line); border-radius: var(--r-md); background:var(--bg-soft);">
+                <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
+                  <span class="pill pill-acc" style="font-size:10px;">PRESENTATION</span>
+                  <strong style="font-size:13px;">Output format</strong>
+                </div>
+                <p style="font-size:12px; color:var(--ink-3);">Group by SKU. Show top 5 affected keywords per SKU with rank_delta, spend, prev_rank, curr_rank. Render rank delta as "+N / -N" (negative = improved).</p>
+              </div>
+            </div>
+            <button class="chip" style="margin-top:14px;">
+              <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+              Add constraint
+            </button>
+          </div>
+
+          <div class="panel-card" style="margin-top:16px;">
+            <h3>Sample output</h3>
+            <div class="table-wrap">
+              <table class="table">
+                <thead><tr><th>SKU</th><th>Keyword</th><th>Spend</th><th>Rank Δ</th></tr></thead>
+                <tbody>
+                  <tr><td class="mono">B0DSJW8</td><td>ice cream maker</td><td class="tabular">$2,140</td><td class="neg tabular">+12</td></tr>
+                  <tr><td class="mono">B08QXB9</td><td>creami ninja</td><td class="tabular">$1,820</td><td class="neg tabular">+9</td></tr>
+                  <tr><td class="mono">B0GHPM2</td><td>flexflame grill</td><td class="tabular">$1,340</td><td class="neg tabular">+7</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex; gap:8px; justify-content:space-between; margin-top:20px;">
+        <button class="btn ghost" data-step-prev="2">← Back</button>
+        <div style="display:flex; gap:8px;">
+          <button class="btn ghost">Save as draft</button>
+          <button class="btn accent" data-step-next="2">Continue to scope →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- STEP 3 -->
+    <section data-step="3" hidden>
+      <div class="panel-card">
+        <h3>Step 3 · Scope &amp; publish</h3>
+        <h2>Who should this use case apply to?</h2>
+
+        <div class="form-row" style="margin-top:24px;">
+          <label class="form-label">Scope</label>
+          <div style="display:flex; flex-direction:column; gap:8px;">
+            <label style="display:flex; align-items:center; gap:12px; padding: 12px 14px; border:1px solid var(--line); border-radius: var(--r-md); cursor:pointer;">
+              <input type="radio" name="scope"> <div>
+                <div style="font-weight:600;">Global</div>
+                <div style="font-size:12px; color:var(--ink-3); margin-top:2px;">Available to every client. Requires data-team approval.</div>
+              </div>
+            </label>
+            <label style="display:flex; align-items:center; gap:12px; padding: 12px 14px; border:1px solid var(--accent); border-radius: var(--r-md); cursor:pointer; background:var(--accent-tint);">
+              <input type="radio" name="scope" checked> <div>
+                <div style="font-weight:600;">Client: SharkNinja</div>
+                <div style="font-size:12px; color:var(--ink-3); margin-top:2px;">Visible only to SharkNinja users. Recommended for new use cases.</div>
+              </div>
+            </label>
+            <label style="display:flex; align-items:center; gap:12px; padding: 12px 14px; border:1px solid var(--line); border-radius: var(--r-md); cursor:pointer;">
+              <input type="radio" name="scope"> <div>
+                <div style="font-weight:600;">Just me · testing</div>
+                <div style="font-size:12px; color:var(--ink-3); margin-top:2px;">Private. Useful while iterating.</div>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <label class="form-label">Reviewer</label>
+          <select class="select">
+            <option>Marcus Lee — FDE</option>
+            <option>Priya Shah — PM</option>
+            <option>Auto-approve (admin only)</option>
+          </select>
+        </div>
+
+        <div style="padding: 16px 18px; background: var(--accent-tint); border-radius: var(--r-md); margin-top: 12px; display:flex; gap:12px;">
+          <svg class="icon-lg" style="color:var(--accent); flex-shrink:0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg>
+          <div style="font-size:13px; color:var(--ink-2);">
+            <strong style="color:var(--accent)">Canary first.</strong> Once published, this use case will be served to 10% of matching questions for 48 hours. If quality holds, it auto-rolls to 100%. You can monitor at <a href="./adapt.html" style="color:var(--accent); text-decoration:underline;">L6 Adapt</a>.
+          </div>
+        </div>
+
+        <div style="display:flex; gap:8px; justify-content:space-between; margin-top:24px;">
+          <button class="btn ghost" data-step-prev="3">← Back</button>
+          <div style="display:flex; gap:8px;">
+            <button class="btn ghost">Save as draft</button>
+            <button class="btn accent">Send for review →</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Draft list (always visible at bottom) -->
+    <section style="margin-top:48px;">
+      <div class="section-head"><h2>Your drafts</h2><span class="count">12</span></div>
+      <div class="table-wrap" style="margin-top:14px;">
+        <table class="table">
+          <thead><tr><th>Use case key</th><th>Status</th><th>Scope</th><th>Author</th><th>Updated</th><th></th></tr></thead>
+          <tbody>
+            <tr><td class="mono">KEYWORD_RANK_DROP_HIGH_SPEND</td><td><span class="pill pill-acc">Drafting</span></td><td>client:SharkNinja</td><td>You</td><td class="mono">just now</td><td><a href="#" class="chip">Open</a></td></tr>
+            <tr><td class="mono">MEDIA_KEYWORD_FRESHNESS</td><td><span class="pill pill-warn">In review</span></td><td>client:SharkNinja</td><td>Priya · PM</td><td class="mono">1h ago</td><td><a href="#" class="chip">Open</a></td></tr>
+            <tr><td class="mono">VIDEO_VIEW_DROP_PER_SKU</td><td><span class="pill pill-warn">In review</span></td><td>global</td><td>Marcus · FDE</td><td class="mono">yesterday</td><td><a href="#" class="chip">Open</a></td></tr>
+            <tr><td class="mono">PROMO_CANNIBALIZATION</td><td><span class="pill pill-info">Canary 10%</span></td><td>client:SharkNinja</td><td>Marcus · FDE</td><td class="mono">2d ago</td><td><a href="#" class="chip">Open</a></td></tr>
+            <tr><td class="mono">FIRST_PARTY_REVIEW_DROP</td><td><span class="pill pill-pos">Published</span></td><td>global</td><td>Priya · PM</td><td class="mono">5d ago</td><td><a href="#" class="chip">View</a></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script src="../assets/app.js"></script>
+</body>
+</html>

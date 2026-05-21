@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Skill Studio · Brain admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body class="surface-admin">
+
+<header class="topbar">
+  <div class="topbar-inner" style="max-width: none;">
+    <a href="../index.html" class="brand"><div class="brand-mark electric">B</div> Brain <span style="font-weight:400; color:var(--ink-3); margin-left:6px;">admin</span></a>
+    <span style="font-size:11px; color:var(--ink-3); font-family:var(--mono); margin-left:8px;">v0.1</span>
+    <div style="margin-left:auto; display:flex; align-items:center; gap:8px;">
+      <span class="chip">Skill: <strong>weekly_top_risks_briefing</strong></span>
+      <button class="btn ghost sm">Save draft</button>
+      <button class="btn accent sm">Publish →</button>
+    </div>
+  </div>
+</header>
+
+<div class="admin-layout">
+
+  <aside class="sidenav">
+    <div class="section-label">Brain</div>
+    <a href="./index.html">Overview</a>
+    <div class="section-label">Knowledge</div>
+    <a href="./memory.html"><span class="layer-num">L1</span> Memory <span class="badge">2.4k</span></a>
+    <div class="section-label">Authoring</div>
+    <a href="./composer.html"><span class="layer-num">L2</span> Composer <span class="badge">12</span></a>
+    <a href="./studio.html" class="active"><span class="layer-num">L2</span> Skill Studio <span class="badge">7</span></a>
+    <div class="section-label">Run-time</div>
+    <a href="./orchestrate.html"><span class="layer-num">L3</span> Orchestrate <span class="badge">218/d</span></a>
+    <a href="./outcomes.html"><span class="layer-num">L5</span> Outcomes <span class="badge">14</span></a>
+    <a href="./adapt.html"><span class="layer-num">L6</span> Adapt <span class="badge">3</span></a>
+  </aside>
+
+  <main class="admin-main">
+
+    <header class="admin-head">
+      <div>
+        <div class="meta">L2 · Authoring</div>
+        <h1>Skill Studio</h1>
+        <p>Compose tools and use cases into orchestrated skills — RCAs, alert triggers, daily briefings, custom workflows. Skills run inside the Brain's execution layer and are bound to tenants via scope rules.</p>
+      </div>
+      <div class="right">
+        <button class="btn ghost">Test skill</button>
+        <button class="btn ghost">Versions <span class="badge" style="margin-left:6px; background:white;">v3</span></button>
+      </div>
+    </header>
+
+    <div class="studio-grid">
+
+      <!-- LEFT: Tool palette -->
+      <div class="studio-panel">
+        <div class="ph">Tools &amp; use cases</div>
+        <div class="pb">
+          <input class="input" placeholder="Search…" style="font-size:12px; padding:7px 10px; margin-bottom:10px;">
+          <div style="font-size:10px; text-transform:uppercase; letter-spacing:.1em; color:var(--ink-3); font-weight:700; margin: 8px 4px;">Triggers</div>
+          <div class="tool-card"><div class="name">Schedule</div><div class="desc">Cron · daily / weekly</div></div>
+          <div class="tool-card"><div class="name">Threshold breach</div><div class="desc">Metric &gt; / &lt; value</div></div>
+          <div class="tool-card"><div class="name">User question</div><div class="desc">NL intent match</div></div>
+
+          <div style="font-size:10px; text-transform:uppercase; letter-spacing:.1em; color:var(--ink-3); font-weight:700; margin: 14px 4px 8px;">Use cases</div>
+          <div class="tool-card"><div class="name">RCA_FOR_SKU</div><div class="desc">Full root-cause for a SKU</div></div>
+          <div class="tool-card"><div class="name">TOP_DRIVERS</div><div class="desc">Top SKU drivers in a category</div></div>
+          <div class="tool-card"><div class="name">RTS_PROJECTION</div><div class="desc">WTD projection vs plan</div></div>
+          <div class="tool-card"><div class="name">MEDIA_IMPACT</div><div class="desc">Keyword spend + rank WoW</div></div>
+
+          <div style="font-size:10px; text-transform:uppercase; letter-spacing:.1em; color:var(--ink-3); font-weight:700; margin: 14px 4px 8px;">Outputs</div>
+          <div class="tool-card"><div class="name">Create alert</div><div class="desc">Adds to user briefing</div></div>
+          <div class="tool-card"><div class="name">Send email</div><div class="desc">Tenant distribution list</div></div>
+          <div class="tool-card"><div class="name">Recommend action</div><div class="desc">With trackable outcome</div></div>
+        </div>
+      </div>
+
+      <!-- CENTER: Canvas -->
+      <div class="studio-panel">
+        <div class="ph" style="display:flex; justify-content:space-between; align-items:center;">
+          <span>Canvas</span>
+          <span style="font-family:var(--mono); font-size:10px; color:var(--ink-3);">8 nodes · 9 edges</span>
+        </div>
+        <div class="pb" style="padding:0;">
+          <div class="canvas" style="height: 540px;">
+            <!-- Nodes -->
+            <div class="node start" style="left:24px; top:40px;">
+              <div class="ty">Trigger</div>
+              <div class="nm">Daily 8am ET</div>
+            </div>
+            <div class="node tool" style="left:200px; top:40px;">
+              <div class="ty">Use case</div>
+              <div class="nm">TOP_DRIVERS</div>
+            </div>
+            <div class="node tool" style="left:200px; top:150px;">
+              <div class="ty">Use case</div>
+              <div class="nm">RTS_PROJECTION</div>
+            </div>
+            <div class="node tool" style="left:200px; top:260px;">
+              <div class="ty">Use case</div>
+              <div class="nm">CURRENT_TOP_RISKS</div>
+            </div>
+            <div class="node cond" style="left:430px; top:160px;">
+              <div class="nm">if gap &gt; $50K</div>
+            </div>
+            <div class="node tool" style="left:600px; top:80px;">
+              <div class="ty">Use case</div>
+              <div class="nm">RCA_FOR_SKU</div>
+            </div>
+            <div class="node end" style="left:600px; top:230px;">
+              <div class="ty">Output</div>
+              <div class="nm">Create alert</div>
+            </div>
+            <div class="node end" style="left:600px; top:340px;">
+              <div class="ty">Output</div>
+              <div class="nm">Recommend action</div>
+            </div>
+
+            <!-- SVG edges (decorative, fixed positions) -->
+            <svg style="position:absolute; inset:0; width:100%; height:100%; pointer-events:none;" fill="none" stroke="#B3ADBF" stroke-width="1.5">
+              <path d="M155 70 C 175 70, 175 70, 200 70"/>
+              <path d="M155 70 C 175 100, 175 130, 200 175"/>
+              <path d="M155 70 C 175 160, 175 250, 200 285"/>
+              <path d="M340 70 C 380 90, 400 160, 430 180"/>
+              <path d="M340 175 L 430 180"/>
+              <path d="M340 285 C 380 250, 400 200, 430 195"/>
+              <path d="M515 180 C 555 130, 570 110, 600 105" stroke="#C231FF" stroke-width="2"/>
+              <path d="M515 195 C 555 220, 570 240, 600 255" stroke="#C231FF" stroke-width="2"/>
+              <path d="M515 200 C 555 280, 580 350, 600 365" stroke="#7F778F" stroke-dasharray="4 4"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: Node properties -->
+      <div class="studio-panel">
+        <div class="ph">Properties · <span style="color:var(--accent)">RCA_FOR_SKU</span></div>
+        <div class="pb">
+          <div class="form-row">
+            <label class="form-label">Mode</label>
+            <select class="select" style="font-size:13px; padding:8px 12px;">
+              <option>advanced (5 parallel signals)</option>
+              <option>basic (single product signal)</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <label class="form-label">Input · SKU source</label>
+            <select class="select" style="font-size:13px; padding:8px 12px;">
+              <option>From upstream node · if-gate</option>
+              <option>User-provided</option>
+              <option>Top-N from prior use case</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <label class="form-label">Window</label>
+            <select class="select" style="font-size:13px; padding:8px 12px;">
+              <option>Last complete week (Sun–Sat)</option>
+              <option>WTD</option>
+              <option>Custom</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <label class="form-label">Timeout</label>
+            <input class="input" value="45s" style="font-size:13px; padding:8px 12px;">
+          </div>
+          <hr style="margin:14px 0;">
+          <div class="form-row">
+            <label class="form-label">Cache policy</label>
+            <div style="display:flex; gap:6px; flex-wrap:wrap;" data-chip-group>
+              <button class="chip active">Read-through</button>
+              <button class="chip">Write-only</button>
+              <button class="chip">Bypass</button>
+            </div>
+          </div>
+          <div class="form-row">
+            <label class="form-label">On failure</label>
+            <div style="display:flex; gap:6px; flex-wrap:wrap;" data-chip-group>
+              <button class="chip">Halt</button>
+              <button class="chip active">Continue</button>
+              <button class="chip">Retry x3</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Skills library -->
+    <section style="margin-top:32px;">
+      <div class="section-head"><h2>Skills library</h2><span class="count">23 · 7 in this workspace</span></div>
+      <div class="table-wrap" style="margin-top:14px;">
+        <table class="table">
+          <thead><tr><th>Skill</th><th>Trigger</th><th>Scope</th><th>Version</th><th>Calls / day</th><th>P50 latency</th></tr></thead>
+          <tbody>
+            <tr><td><strong>weekly_top_risks_briefing</strong><div style="font-size:12px; color:var(--ink-3); margin-top:2px;">Cron → TOP_DRIVERS → RTS → CURRENT_TOP_RISKS → if-gate → RCA + alert</div></td><td>Schedule · 8am</td><td>client:SharkNinja</td><td class="mono">v3</td><td class="mono">1 (cron)</td><td class="mono">14.2s</td></tr>
+            <tr><td><strong>sku_health_quick_check</strong><div style="font-size:12px; color:var(--ink-3); margin-top:2px;">User question → RCA_FOR_SKU_HEADLINE → trackable recommendation</div></td><td>User question</td><td>global</td><td class="mono">v7</td><td class="mono">142</td><td class="mono">3.1s</td></tr>
+            <tr><td><strong>promo_cannibalization_detector</strong><div style="font-size:12px; color:var(--ink-3); margin-top:2px;">Threshold breach → PROMO_SIGNAL_IMPACT → RCA → alert</div></td><td>Threshold</td><td>client:SharkNinja</td><td class="mono">v1 · canary</td><td class="mono">42</td><td class="mono">4.7s</td></tr>
+            <tr><td><strong>media_health_morning_digest</strong><div style="font-size:12px; color:var(--ink-3); margin-top:2px;">Cron → MEDIA_IMPACT_SIGNAL → email digest</div></td><td>Schedule · 9am</td><td>global</td><td class="mono">v2</td><td class="mono">1</td><td class="mono">2.4s</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script src="../assets/app.js"></script>
+</body>
+</html>

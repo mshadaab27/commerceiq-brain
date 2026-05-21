@@ -1,0 +1,25 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Editor / IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+npm-debug.log*
+
+# Local server / build artifacts (none currently, but reserved)
+node_modules/
+dist/
+.cache/
+
+# Local temp files
+/tmp/
+*.tmp

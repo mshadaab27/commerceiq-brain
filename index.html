@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CommerceIQ · Today's briefing</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./assets/styles.css">
+</head>
+<body class="surface-customer">
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a href="./index.html" class="brand"><div class="brand-mark">C</div> CommerceIQ</a>
+    <nav class="nav" aria-label="Primary">
+      <a href="./index.html" class="active">Briefing</a>
+      <a href="./ask.html">Ask</a>
+      <a href="./actions.html">Actions</a>
+    </nav>
+    <label class="search">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+      <input type="text" placeholder="Search SKUs, brands, alerts…">
+      <span class="kbd">⌘K</span>
+    </label>
+    <button type="button" class="iconbtn" aria-label="Notifications">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+      <span class="dot"></span>
+    </button>
+    <a href="./admin/index.html" class="iconbtn brain-link" title="Brain admin" aria-label="Brain admin portal">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/><path d="M20 3v4"/><path d="M22 5h-4"/><path d="M4 17v2"/><path d="M5 18H3"/></svg>
+    </a>
+    <div class="avatar" aria-label="Sarah Chen">SC</div>
+  </div>
+</header>
+
+<main class="page">
+
+  <section class="hero" data-render="hero"></section>
+
+  <section class="section" data-render="briefing"></section>
+
+  <section class="actions-strip" data-render="actions-strip"></section>
+
+  <section class="ask-bar">
+    <form class="ask-input" onsubmit="event.preventDefault(); var v=this.querySelector('input').value; window.location.href = './ask.html' + (v ? '?q='+encodeURIComponent(v) : '');">
+      <input type="text" placeholder="Ask anything about your business… e.g. why did CREAMi miss plan?">
+      <button type="submit" class="ask-send" aria-label="Send">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 7-7 7 7"/><path d="M12 19V5"/></svg>
+      </button>
+    </form>
+    <div class="brand-footnote">CommerceIQ <span class="pwr-dot"></span> AI-powered analysis · measured against a synthetic baseline</div>
+  </section>
+
+</main>
+
+<script src="./assets/data.js"></script>
+<script src="./assets/render.js"></script>
+<script src="./assets/app.js"></script>
+</body>
+</html>

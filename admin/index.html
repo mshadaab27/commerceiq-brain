@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CIQ Brain · Admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body class="surface-admin">
+
+<header class="topbar">
+  <div class="topbar-inner" style="max-width: none;">
+    <a href="../index.html" class="brand"><div class="brand-mark electric">B</div> Brain <span style="font-weight:400; color:var(--ink-3); margin-left:6px;">admin</span></a>
+    <span style="font-size:11px; color:var(--ink-3); font-family:var(--mono); margin-left:8px;">v0.1 · commerceiq</span>
+    <div style="margin-left:auto; display:flex; align-items:center; gap:8px;">
+      <span class="chip" style="background:var(--accent-tint); color:var(--accent);">SharkNinja</span>
+      <span class="chip">All products</span>
+      <a href="../index.html" class="btn ghost sm">← Switch to customer view</a>
+    </div>
+  </div>
+</header>
+
+<div class="admin-layout">
+
+  <aside class="sidenav">
+    <div class="section-label">Brain</div>
+    <a href="./index.html" class="active">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg>
+      Overview
+    </a>
+
+    <div class="section-label">Knowledge</div>
+    <a href="./memory.html"><span class="layer-num">L1</span> Memory <span class="badge">2.4k</span></a>
+
+    <div class="section-label">Authoring</div>
+    <a href="./composer.html"><span class="layer-num">L2</span> Composer <span class="badge">12</span></a>
+    <a href="./studio.html"><span class="layer-num">L2</span> Skill Studio <span class="badge">7</span></a>
+
+    <div class="section-label">Run-time</div>
+    <a href="./orchestrate.html"><span class="layer-num">L3</span> Orchestrate <span class="badge">218/d</span></a>
+    <a href="./outcomes.html"><span class="layer-num">L5</span> Outcomes <span class="badge">14</span></a>
+    <a href="./adapt.html"><span class="layer-num">L6</span> Adapt <span class="badge">3</span></a>
+
+    <div class="section-label">Other</div>
+    <a href="#">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09a1.65 1.65 0 0 0 1.51-1z"/></svg>
+      Settings
+    </a>
+  </aside>
+
+  <main class="admin-main">
+    <header class="admin-head">
+      <div>
+        <div class="meta">Overview</div>
+        <h1>The Brain at a glance</h1>
+        <p>Internal control plane for the BRAIN. PMs, CS, FDEs, and data team work here to compose use cases, govern memory, audit outcomes, and review learning loops. Customers never see this.</p>
+      </div>
+      <div class="right">
+        <button class="btn ghost">Export report</button>
+        <a href="./composer.html" class="btn accent">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+          Compose a use case
+        </a>
+      </div>
+    </header>
+
+    <!-- Top KPI strip -->
+    <div class="actions-stats" style="margin-bottom: 24px;">
+      <div class="stat"><div class="l">Use cases live</div><div class="v">48</div></div>
+      <div class="stat"><div class="l">Skills published</div><div class="v">23</div></div>
+      <div class="stat"><div class="l">Questions / day</div><div class="v acc">218</div></div>
+      <div class="stat"><div class="l">Actions tracked</div><div class="v pos">14<span class="unit">live</span></div></div>
+    </div>
+
+    <!-- Layer tiles -->
+    <div class="tile-grid">
+      <a href="./memory.html" class="tile fade-up delay-1">
+        <div class="row1"><span class="layer-num">L1</span><strong style="color:var(--ink-3); font-size:11px; letter-spacing:.1em; text-transform:uppercase;">Knowledge substrate</strong></div>
+        <h3>Memory</h3>
+        <p>Causal graph, episodic traces, procedural rules, tenant context. Everything the Brain knows, with provenance.</p>
+        <div class="stat-row">
+          <div class="s">Nodes <b>2,431</b></div>
+          <div class="s">Edges <b>5,872</b></div>
+          <div class="s">Episodes <b>1,148</b></div>
+        </div>
+      </a>
+
+      <a href="./composer.html" class="tile fade-up delay-2">
+        <div class="row1"><span class="layer-num">L2</span><strong style="color:var(--ink-3); font-size:11px; letter-spacing:.1em; text-transform:uppercase;">Authoring</strong></div>
+        <h3>Composer</h3>
+        <p>Natural-language → executable use case. PMs describe an analysis; the Brain drafts the use case, SQL, and constraint rules.</p>
+        <div class="stat-row">
+          <div class="s">Drafts <b>12</b></div>
+          <div class="s">In review <b>4</b></div>
+          <div class="s">Published this wk <b>3</b></div>
+        </div>
+      </a>
+
+      <a href="./studio.html" class="tile fade-up delay-2">
+        <div class="row1"><span class="layer-num">L2</span><strong style="color:var(--ink-3); font-size:11px; letter-spacing:.1em; text-transform:uppercase;">Authoring</strong></div>
+        <h3>Skill Studio</h3>
+        <p>Visual composition of tools and use cases into orchestrated skills. Build alerts, multi-step RCAs, or custom workflows.</p>
+        <div class="stat-row">
+          <div class="s">Skills <b>23</b></div>
+          <div class="s">Tools <b>147</b></div>
+          <div class="s">Avg latency <b>1.8s</b></div>
+        </div>
+      </a>
+
+      <a href="./orchestrate.html" class="tile fade-up delay-3">
+        <div class="row1"><span class="layer-num">L3</span><strong style="color:var(--ink-3); font-size:11px; letter-spacing:.1em; text-transform:uppercase;">Meta-orchestration</strong></div>
+        <h3>Orchestrate</h3>
+        <p>The Router: how every customer question is routed across agents. Confidence, latency, and novel-question mining.</p>
+        <div class="stat-row">
+          <div class="s">Routed today <b>218</b></div>
+          <div class="s">Confidence avg <b>0.87</b></div>
+          <div class="s">Novel <b>14</b></div>
+        </div>
+      </a>
+
+      <a href="./outcomes.html" class="tile fade-up delay-3">
+        <div class="row1"><span class="layer-num">L5</span><strong style="color:var(--ink-3); font-size:11px; letter-spacing:.1em; text-transform:uppercase;">Outcome tracking</strong></div>
+        <h3>Outcomes</h3>
+        <p>Every recommendation acted on is measured against a synthetic baseline. The loop that makes the Brain smarter.</p>
+        <div class="stat-row">
+          <div class="s">Tracking <b>14</b></div>
+          <div class="s">Worked <b class="pos">62%</b></div>
+          <div class="s">Recovered $ <b>$1.8M</b></div>
+        </div>
+      </a>
+
+      <a href="./adapt.html" class="tile fade-up delay-4">
+        <div class="row1"><span class="layer-num">L6</span><strong style="color:var(--ink-3); font-size:11px; letter-spacing:.1em; text-transform:uppercase;">Adaptation</strong></div>
+        <h3>Adapt</h3>
+        <p>Outcome → belief updates. Constraint refinements. Use-case mining. Every change canary-rolled before promotion.</p>
+        <div class="stat-row">
+          <div class="s">Updates pending <b>3</b></div>
+          <div class="s">In canary <b>2</b></div>
+          <div class="s">This week <b>11</b></div>
+        </div>
+      </a>
+    </div>
+
+    <!-- Recent activity feed -->
+    <div class="section-head" style="margin-top:48px;"><h2>Recent activity</h2><span class="count">last 24h</span></div>
+    <div class="table-wrap" style="margin-top:14px;">
+      <table class="table">
+        <thead><tr><th style="width:120px">Time</th><th>Event</th><th style="width:120px">Layer</th><th style="width:160px">Actor</th><th></th></tr></thead>
+        <tbody>
+          <tr><td class="mono">2m ago</td><td>Constraint refined: "deal_badge_present" weight +0.07 from outcome n=14</td><td><span class="pill pill-acc">L6 Adapt</span></td><td>Brain (auto)</td><td><a href="./adapt.html" class="chip">Review →</a></td></tr>
+          <tr><td class="mono">18m ago</td><td>Novel question pattern detected: "projected gap by channel" (n=8 this week)</td><td><span class="pill pill-info">L3 Orchestrate</span></td><td>Brain (auto)</td><td><a href="./orchestrate.html" class="chip">Mine →</a></td></tr>
+          <tr><td class="mono">1h ago</td><td>Use case <strong>media_keyword_freshness</strong> published to <b>client:SharkNinja</b></td><td><span class="pill pill-acc">L2 Composer</span></td><td>Priya · PM</td><td><a href="./composer.html" class="chip">View →</a></td></tr>
+          <tr><td class="mono">3h ago</td><td>Action measured: fix_deal_badge · B0DSJW8SFG · +9.2% (synthetic control)</td><td><span class="pill pill-pos">L5 Outcomes</span></td><td>Brain (auto)</td><td><a href="./outcomes.html" class="chip">Details →</a></td></tr>
+          <tr><td class="mono">6h ago</td><td>Skill <strong>weekly_top_risks_briefing</strong> published · global</td><td><span class="pill pill-acc">L2 Studio</span></td><td>Marcus · FDE</td><td><a href="./studio.html" class="chip">View →</a></td></tr>
+          <tr><td class="mono">8h ago</td><td>KG edge added: promo_change_wow → ops, n=22 evidence, strength 0.74</td><td><span class="pill pill-info">L1 Memory</span></td><td>Brain (auto)</td><td><a href="./memory.html" class="chip">View →</a></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+</div>
+
+<script src="../assets/app.js"></script>
+</body>
+</html>

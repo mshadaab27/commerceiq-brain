@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CommerceIQ · Alert</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./assets/styles.css">
+</head>
+<body class="surface-customer">
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a href="./index.html" class="brand"><div class="brand-mark">C</div> CommerceIQ</a>
+    <nav class="nav">
+      <a href="./index.html" class="active">Briefing</a>
+      <a href="./ask.html">Ask</a>
+      <a href="./actions.html">Actions</a>
+    </nav>
+    <label class="search">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+      <input type="text" placeholder="Search SKUs, brands, alerts…">
+      <span class="kbd">⌘K</span>
+    </label>
+    <button type="button" class="iconbtn" aria-label="Notifications"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg></button>
+    <div class="avatar">SC</div>
+  </div>
+</header>
+
+<main class="page">
+  <section data-render="recall-banner" style="margin-top: 24px; background: linear-gradient(135deg, rgba(194,49,255,.06), rgba(90,175,254,.06)); border: 1px solid rgba(194,49,255,.15); border-radius: var(--r-lg); padding: 14px 16px;"></section>
+
+  <section data-render="alert"></section>
+
+  <section class="ask-bar">
+    <form class="ask-input" onsubmit="event.preventDefault(); window.__toast && window.__toast('Routing your follow-up…', 'accent');">
+      <input type="text" placeholder="Follow up on this SKU… e.g. show me the keyword rank trend">
+      <button type="submit" class="ask-send" aria-label="Send"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 7-7 7 7"/><path d="M12 19V5"/></svg></button>
+    </form>
+  </section>
+</main>
+
+<!-- Modal: choose a different action -->
+<div class="modal-shade" id="action-modal">
+  <div class="modal">
+    <div class="modal-head">
+      <h3>Choose a different action</h3>
+      <button type="button" class="x" data-modal-close>
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <p style="color:var(--ink-2); font-size: 13px; margin-bottom: 14px;">Each option below will be tracked for impact against a synthetic baseline of comparable SKUs.</p>
+      <div style="display:flex; flex-direction:column; gap:10px;">
+        <label style="display:flex; align-items:center; gap:12px; padding: 12px 14px; border:1px solid var(--line); border-radius: var(--r-md); cursor:pointer;">
+          <input type="radio" name="action" checked> <div>
+            <div style="font-weight:600; color:var(--ink);">Recommended (default)</div>
+            <div style="font-size:12px; color:var(--ink-3); margin-top:2px;">Use the Brain's suggestion</div>
+          </div>
+        </label>
+        <label style="display:flex; align-items:center; gap:12px; padding: 12px 14px; border:1px solid var(--line); border-radius: var(--r-md); cursor:pointer;">
+          <input type="radio" name="action"> <div>
+            <div style="font-weight:600; color:var(--ink);">Replenish inventory</div>
+            <div style="font-size:12px; color:var(--ink-3); margin-top:2px;">Expected +4–7% · longer time to result</div>
+          </div>
+        </label>
+        <label style="display:flex; align-items:center; gap:12px; padding: 12px 14px; border:1px solid var(--line); border-radius: var(--r-md); cursor:pointer;">
+          <input type="radio" name="action"> <div>
+            <div style="font-weight:600; color:var(--ink);">Custom action</div>
+            <div style="font-size:12px; color:var(--ink-3); margin-top:2px;">Describe what you did and what to measure</div>
+          </div>
+        </label>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button type="button" class="btn ghost" data-modal-close>Cancel</button>
+      <button type="button" class="btn accent" data-modal-close>Track this action</button>
+    </div>
+  </div>
+</div>
+
+<script src="./assets/data.js"></script>
+<script src="./assets/render.js"></script>
+<script src="./assets/app.js"></script>
+</body>
+</html>

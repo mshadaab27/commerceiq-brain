@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Memory · Brain admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body class="surface-admin">
+
+<header class="topbar">
+  <div class="topbar-inner" style="max-width:none">
+    <a href="../index.html" class="brand"><div class="brand-mark electric">B</div> Brain <span style="font-weight:400; color:var(--ink-3); margin-left:6px;">admin</span></a>
+    <span style="font-size:11px; color:var(--ink-3); font-family:var(--mono); margin-left:8px;">v0.1</span>
+    <div style="margin-left:auto; display:flex; align-items:center; gap:8px;">
+      <span class="chip" style="background:var(--accent-tint); color:var(--accent);">SharkNinja</span>
+      <a href="../index.html" class="btn ghost sm">← Customer view</a>
+    </div>
+  </div>
+</header>
+
+<div class="admin-layout">
+  <aside class="sidenav">
+    <div class="section-label">Brain</div>
+    <a href="./index.html">Overview</a>
+    <div class="section-label">Knowledge</div>
+    <a href="./memory.html" class="active"><span class="layer-num">L1</span> Memory <span class="badge">2.4k</span></a>
+    <div class="section-label">Authoring</div>
+    <a href="./composer.html"><span class="layer-num">L2</span> Composer <span class="badge">12</span></a>
+    <a href="./studio.html"><span class="layer-num">L2</span> Skill Studio <span class="badge">7</span></a>
+    <div class="section-label">Run-time</div>
+    <a href="./orchestrate.html"><span class="layer-num">L3</span> Orchestrate <span class="badge">218/d</span></a>
+    <a href="./outcomes.html"><span class="layer-num">L5</span> Outcomes <span class="badge">14</span></a>
+    <a href="./adapt.html"><span class="layer-num">L6</span> Adapt <span class="badge">3</span></a>
+  </aside>
+
+  <main class="admin-main">
+    <header class="admin-head">
+      <div>
+        <div class="meta">L1 · Knowledge substrate</div>
+        <h1>Memory</h1>
+        <p>Everything the Brain knows. Causal graph (factors → metrics with learned strength), episodic memory (every investigation it ran), procedural store (use cases / constraints), and tenant context.</p>
+      </div>
+      <div class="right">
+        <button class="btn ghost">Export snapshot</button>
+      </div>
+    </header>
+
+    <div class="actions-stats" style="margin-bottom:24px;">
+      <div class="stat"><div class="l">Entities</div><div class="v">2,431</div></div>
+      <div class="stat"><div class="l">Edges</div><div class="v">5,872</div></div>
+      <div class="stat"><div class="l">Episodes</div><div class="v">1,148</div></div>
+      <div class="stat"><div class="l">Last validated</div><div class="v">2m ago</div></div>
+    </div>
+
+    <div class="tabs" data-tabs>
+      <button class="active" data-tab="kg">Causal graph</button>
+      <button data-tab="epi">Episodic memory</button>
+      <button data-tab="proc">Procedural store</button>
+      <button data-tab="ctx">Context</button>
+    </div>
+
+    <!-- KG panel -->
+    <section data-panel="kg">
+      <div style="display:grid; grid-template-columns: 1fr 320px; gap:20px;">
+        <div class="kg-canvas">
+          <!-- Nodes -->
+          <div class="kg-node factor" style="left:40px; top:60px;">deal_badge_present</div>
+          <div class="kg-node factor" style="left:40px; top:160px;">unavailability_pct</div>
+          <div class="kg-node factor" style="left:40px; top:260px;">lbb_status</div>
+          <div class="kg-node factor" style="left:40px; top:360px;">ad_spend_wow</div>
+
+          <div class="kg-node signal" style="left:300px; top:80px;">promo_change_wow</div>
+          <div class="kg-node signal" style="left:300px; top:200px;">oos_signal</div>
+          <div class="kg-node signal" style="left:300px; top:320px;">media_signal</div>
+
+          <div class="kg-node metric" style="left:580px; top:140px;">ordered_revenue (OPS)</div>
+          <div class="kg-node metric" style="left:580px; top:240px;">glance_views</div>
+          <div class="kg-node metric" style="left:580px; top:340px;">unit_conversion</div>
+
+          <svg style="position:absolute; inset:0; width:100%; height:100%; pointer-events:none;" fill="none" stroke="#B3ADBF" stroke-width="1.5">
+            <path d="M180 76 C 220 80, 240 90, 295 95" stroke="#C231FF" stroke-width="2.5"/>
+            <path d="M180 176 C 220 180, 240 200, 295 215" stroke="#C231FF" stroke-width="2"/>
+            <path d="M180 276 C 220 280, 250 280, 295 280"/>
+            <path d="M180 376 C 220 350, 240 340, 295 335"/>
+            <path d="M410 95 C 480 110, 520 130, 575 150" stroke="#C231FF" stroke-width="2.5"/>
+            <path d="M410 215 C 480 200, 520 200, 575 250"/>
+            <path d="M410 335 C 480 320, 520 320, 575 350"/>
+            <!-- weight labels -->
+            <text x="240" y="72" font-family="JetBrains Mono" font-size="10" fill="#C231FF" font-weight="700">+0.91</text>
+            <text x="240" y="172" font-family="JetBrains Mono" font-size="10" fill="#C231FF" font-weight="700">+0.74</text>
+            <text x="240" y="272" font-family="JetBrains Mono" font-size="10" fill="#7F778F" font-weight="600">+0.38</text>
+            <text x="240" y="372" font-family="JetBrains Mono" font-size="10" fill="#7F778F" font-weight="600">+0.18</text>
+            <text x="490" y="125" font-family="JetBrains Mono" font-size="10" fill="#C231FF" font-weight="700">+0.91 n=14</text>
+          </svg>
+
+          <!-- Legend -->
+          <div style="position:absolute; bottom:14px; left:14px; display:flex; gap:14px; font-size:11px; color:var(--ink-3);">
+            <span style="display:inline-flex; align-items:center; gap:6px;"><span style="width:10px;height:10px;border-radius:50%;background:var(--neg-tint); border:1.5px solid var(--neg);"></span> Factor (actionable)</span>
+            <span style="display:inline-flex; align-items:center; gap:6px;"><span style="width:10px;height:10px;border-radius:50%;background:var(--accent-tint); border:1.5px solid var(--accent);"></span> Signal</span>
+            <span style="display:inline-flex; align-items:center; gap:6px;"><span style="width:10px;height:10px;border-radius:50%;background:var(--cobalt-tint); border:1.5px solid var(--cobalt);"></span> Metric</span>
+          </div>
+        </div>
+
+        <div class="panel-card">
+          <h3>Selected edge</h3>
+          <h2 style="font-size:14px;">deal_badge_present → ordered_revenue (OPS)</h2>
+          <div style="display:flex; gap:16px; margin-top: 14px;">
+            <div><div class="help">Strength</div><div style="font-weight:700; font-size:20px; color:var(--accent);">+0.91</div></div>
+            <div><div class="help">Evidence</div><div style="font-weight:700; font-size:20px;">n=14</div></div>
+            <div><div class="help">Lag</div><div style="font-weight:700; font-size:20px;">7d</div></div>
+          </div>
+          <p style="font-size:13px; color:var(--ink-2); margin-top:14px; line-height:1.5;">When a SKU's deal badge appears (after being missing), ordered revenue lifts within 7 days. Strength learned from 14 measured outcomes, last updated 2 minutes ago.</p>
+          <hr style="margin:16px 0;">
+          <div class="help" style="margin-bottom:6px;">Scope</div>
+          <span class="chip" style="background:var(--cobalt-tint); color:var(--cobalt);">client:SharkNinja</span>
+          <hr style="margin:16px 0;">
+          <div class="help" style="margin-bottom:8px;">Recent evidence</div>
+          <div style="font-size:12px; color:var(--ink-2); display:flex; flex-direction:column; gap:6px;">
+            <div>B0DSJW8SFG · +11.4% · 7d · syn ctrl</div>
+            <div>B07YT83K4Z · +14.8% · 7d · pre/post</div>
+            <div>B0CRSPK22  · +3.9% · 7d · pre/post</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Episodic -->
+    <section data-panel="epi" hidden>
+      <div class="table-wrap">
+        <table class="table">
+          <thead><tr><th>When</th><th>Question</th><th>Routed to</th><th>Tenant</th><th>Outcome</th><th></th></tr></thead>
+          <tbody>
+            <tr><td class="mono">2h ago</td><td>Why did Ninja CREAMi miss plan?</td><td>RCA_FOR_SKU</td><td>SharkNinja</td><td><span class="pill pill-pos">Acted · +9.2%</span></td><td><a href="#" class="chip">View</a></td></tr>
+            <tr><td class="mono">18m ago</td><td>What's driving the gap in outdoor grill?</td><td>TOP_DRIVERS</td><td>SharkNinja</td><td><span class="pill" style="background:var(--bg-soft); color:var(--ink-3);">No action</span></td><td><a href="#" class="chip">View</a></td></tr>
+            <tr><td class="mono">1h ago</td><td>Projected gap this week</td><td>RTS_PROJECTION_GAP_TO_PLAN</td><td>SharkNinja</td><td><span class="pill" style="background:var(--bg-soft); color:var(--ink-3);">Informational</span></td><td><a href="#" class="chip">View</a></td></tr>
+            <tr><td class="mono">3h ago</td><td>Why is Shark FlexStyle traffic down?</td><td>MEDIA_IMPACT_SIGNAL</td><td>SharkNinja</td><td><span class="pill pill-warn">Acted · measuring</span></td><td><a href="#" class="chip">View</a></td></tr>
+            <tr><td class="mono">5h ago</td><td>Is buy box safe on CREAMi NC301?</td><td>LBB_SKU_LOOKUP</td><td>SharkNinja</td><td><span class="pill pill-pos">Confirmed safe</span></td><td><a href="#" class="chip">View</a></td></tr>
+            <tr><td class="mono">yesterday</td><td>Top SKUs at risk this week</td><td>weekly_top_risks_briefing</td><td>SharkNinja</td><td><span class="pill pill-acc">5 actions logged</span></td><td><a href="#" class="chip">View</a></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Procedural -->
+    <section data-panel="proc" hidden>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+        <div class="panel-card">
+          <h3>Use cases</h3>
+          <h2>48 live</h2>
+          <p class="help" style="margin-top:6px;">Across 5 product lines.</p>
+          <hr style="margin:14px 0;">
+          <div style="display:flex; flex-direction:column; gap:8px; font-size:13px;">
+            <div style="display:flex; justify-content:space-between;"><span>DSA (Amazon RCA)</span><span class="mono">22</span></div>
+            <div style="display:flex; justify-content:space-between;"><span>MAP (Marketing Attribution)</span><span class="mono">11</span></div>
+            <div style="display:flex; justify-content:space-between;"><span>RMM (Retail Media Mgmt)</span><span class="mono">8</span></div>
+            <div style="display:flex; justify-content:space-between;"><span>RGM (Revenue Growth Mgmt)</span><span class="mono">5</span></div>
+            <div style="display:flex; justify-content:space-between;"><span>Custom (this client)</span><span class="mono">2</span></div>
+          </div>
+        </div>
+        <div class="panel-card">
+          <h3>Constraint rules</h3>
+          <h2>237 active</h2>
+          <p class="help" style="margin-top:6px;">Across 3 phases.</p>
+          <hr style="margin:14px 0;">
+          <div style="display:flex; flex-direction:column; gap:8px; font-size:13px;">
+            <div style="display:flex; justify-content:space-between; align-items:center;"><span>DATA</span><span class="mono">92</span></div>
+            <div style="display:flex; justify-content:space-between; align-items:center;"><span>ANALYSIS</span><span class="mono">71</span></div>
+            <div style="display:flex; justify-content:space-between; align-items:center;"><span>PRESENTATION</span><span class="mono">74</span></div>
+            <hr>
+            <div style="display:flex; justify-content:space-between; align-items:center;"><span>Last refined by L6</span><span class="mono">2m ago</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Context -->
+    <section data-panel="ctx" hidden>
+      <div class="panel-card">
+        <h3>Active context</h3>
+        <h2>14 entries</h2>
+        <p class="help" style="margin-top:6px;">Tenant, user, and thread-level facts injected into prompts based on relevance.</p>
+        <div class="table-wrap" style="margin-top:16px;">
+          <table class="table">
+            <thead><tr><th>Scope</th><th>Content</th><th>Author</th><th>Expires</th></tr></thead>
+            <tbody>
+              <tr><td><span class="pill pill-info">tenant:SharkNinja</span></td><td>SharkNinja launched a new "FlexFlame" campaign on May 15; expect inflated grill metrics through May 22.</td><td>Maya · CS</td><td>May 22</td></tr>
+              <tr><td><span class="pill pill-info">tenant:SharkNinja</span></td><td>Ignore SKUs with attribute is_test_product=true</td><td>Marcus · FDE</td><td>—</td></tr>
+              <tr><td><span class="pill" style="background:#FFF7E8; color:#92400E;">user:sarah.chen</span></td><td>Default brand filter: Ninja. Time zone: ET.</td><td>Sarah (self)</td><td>—</td></tr>
+              <tr><td><span class="pill" style="background:var(--bg-soft); color:var(--ink-3);">global</span></td><td>Use Sunday–Saturday weeks for all WoW comparisons.</td><td>Platform</td><td>—</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script src="../assets/app.js"></script>
+</body>
+</html>

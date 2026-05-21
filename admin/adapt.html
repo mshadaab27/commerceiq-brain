@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Adapt · Brain admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body class="surface-admin">
+
+<header class="topbar">
+  <div class="topbar-inner" style="max-width:none">
+    <a href="../index.html" class="brand"><div class="brand-mark electric">B</div> Brain <span style="font-weight:400; color:var(--ink-3); margin-left:6px;">admin</span></a>
+    <span style="font-size:11px; color:var(--ink-3); font-family:var(--mono); margin-left:8px;">v0.1</span>
+    <div style="margin-left:auto; display:flex; align-items:center; gap:8px;">
+      <span class="chip" style="background:var(--accent-tint); color:var(--accent);">SharkNinja</span>
+      <a href="../index.html" class="btn ghost sm">← Customer view</a>
+    </div>
+  </div>
+</header>
+
+<div class="admin-layout">
+  <aside class="sidenav">
+    <div class="section-label">Brain</div>
+    <a href="./index.html">Overview</a>
+    <div class="section-label">Knowledge</div>
+    <a href="./memory.html"><span class="layer-num">L1</span> Memory <span class="badge">2.4k</span></a>
+    <div class="section-label">Authoring</div>
+    <a href="./composer.html"><span class="layer-num">L2</span> Composer <span class="badge">12</span></a>
+    <a href="./studio.html"><span class="layer-num">L2</span> Skill Studio <span class="badge">7</span></a>
+    <div class="section-label">Run-time</div>
+    <a href="./orchestrate.html"><span class="layer-num">L3</span> Orchestrate <span class="badge">218/d</span></a>
+    <a href="./outcomes.html"><span class="layer-num">L5</span> Outcomes <span class="badge">14</span></a>
+    <a href="./adapt.html" class="active"><span class="layer-num">L6</span> Adapt <span class="badge">3</span></a>
+  </aside>
+
+  <main class="admin-main">
+    <header class="admin-head">
+      <div>
+        <div class="meta">L6 · Adaptation</div>
+        <h1>Adapt</h1>
+        <p>The Brain's learning loops. Outcomes feed belief updates, novel-question patterns propose new use cases, user feedback refines constraints. Every change runs through a canary before it can affect customer answers at scale.</p>
+      </div>
+      <div class="right">
+        <button class="btn ghost">Loop config</button>
+      </div>
+    </header>
+
+    <div class="actions-stats" style="margin-bottom:24px;">
+      <div class="stat"><div class="l">Updates pending review</div><div class="v acc">3</div></div>
+      <div class="stat"><div class="l">In canary (10%)</div><div class="v">2</div></div>
+      <div class="stat"><div class="l">Promoted this week</div><div class="v pos">11</div></div>
+      <div class="stat"><div class="l">Reverted this month</div><div class="v" style="color:var(--ink-3)">1</div></div>
+    </div>
+
+    <!-- Learning loops -->
+    <section>
+      <div class="section-head"><h2>Learning loops</h2><span class="count">6 active</span></div>
+      <div class="tile-grid" style="margin-top:14px;">
+        <div class="tile">
+          <div class="row1"><span class="layer-num">L1</span><strong style="color:var(--ink-3); font-size:11px; letter-spacing:.1em; text-transform:uppercase;">Daily</strong></div>
+          <h3>Factor reweighting</h3>
+          <p>Bayesian update to KG edge strengths from yesterday's measured outcomes.</p>
+          <div class="stat-row"><div class="s">Updates yest. <b>4</b></div><div class="s">Avg Δ <b>+0.04</b></div></div>
+        </div>
+        <div class="tile">
+          <div class="row1"><span class="layer-num">L2</span><strong style="color:var(--ink-3); font-size:11px; letter-spacing:.1em; text-transform:uppercase;">Weekly</strong></div>
+          <h3>Constraint refinement</h3>
+          <p>Adjust constraint priorities per tenant based on 👍/👎 on factor surfacing.</p>
+          <div class="stat-row"><div class="s">Pending <b>1</b></div><div class="s">Promoted <b>3</b></div></div>
+        </div>
+        <div class="tile">
+          <div class="row1"><span class="layer-num">L3</span><strong style="color:var(--ink-3); font-size:11px; letter-spacing:.1em; text-transform:uppercase;">Weekly</strong></div>
+          <h3>Use-case mining</h3>
+          <p>Detect novel question patterns and propose new use cases to the Composer.</p>
+          <div class="stat-row"><div class="s">Patterns <b>14</b></div><div class="s">Promoted <b>2</b></div></div>
+        </div>
+        <div class="tile">
+          <div class="row1"><span class="layer-num">L3</span><strong style="color:var(--ink-3); font-size:11px; letter-spacing:.1em; text-transform:uppercase;">Monthly</strong></div>
+          <h3>Routing tuning</h3>
+          <p>Update Router classifier examples from user satisfaction signals.</p>
+          <div class="stat-row"><div class="s">Examples added <b>22</b></div></div>
+        </div>
+        <div class="tile">
+          <div class="row1"><span class="layer-num">L4</span><strong style="color:var(--ink-3); font-size:11px; letter-spacing:.1em; text-transform:uppercase;">Continuous</strong></div>
+          <h3>Prompt drift detection</h3>
+          <p>Alert humans when performance regresses after a prompt change.</p>
+          <div class="stat-row"><div class="s">Alerts this wk <b>0</b></div></div>
+        </div>
+        <div class="tile">
+          <div class="row1"><span class="layer-num">L1</span><strong style="color:var(--ink-3); font-size:11px; letter-spacing:.1em; text-transform:uppercase;">Daily</strong></div>
+          <h3>Personalization</h3>
+          <p>Per-user context updates from action history and preferred routings.</p>
+          <div class="stat-row"><div class="s">Profiles updated <b>148</b></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pending review queue -->
+    <section style="margin-top:40px;">
+      <div class="section-head"><h2>Pending review</h2><span class="count">3 changes</span></div>
+      <div class="table-wrap" style="margin-top:14px;">
+        <table class="table">
+          <thead><tr><th>Proposed change</th><th>Source loop</th><th>Evidence</th><th>Risk</th><th></th></tr></thead>
+          <tbody>
+            <tr>
+              <td><strong>Increase weight of <span class="mono">deal_badge_present → ops</span> from 0.84 to 0.91</strong><div style="font-size:12px; color:var(--ink-3); margin-top:4px;">scope: client:SharkNinja · 7-day measurement window confirmed</div></td>
+              <td><span class="pill pill-info">L1 reweighting</span></td>
+              <td class="mono">n=14, last 30d</td>
+              <td><span class="pill pill-pos">Low</span></td>
+              <td><div style="display:flex; gap:6px;"><button class="btn ghost sm" data-reject>Reject</button><button class="btn accent sm" data-approve>Approve → canary</button></div></td>
+            </tr>
+            <tr>
+              <td><strong>Promote use case <span class="mono">PROMO_CANNIBALIZATION</span> from canary to 100%</strong><div style="font-size:12px; color:var(--ink-3); margin-top:4px;">scope: client:SharkNinja · quality holds at canary 10%</div></td>
+              <td><span class="pill pill-acc">L2 use-case mining</span></td>
+              <td class="mono">42 calls · 0.86 conf</td>
+              <td><span class="pill pill-warn">Medium</span></td>
+              <td><div style="display:flex; gap:6px;"><button class="btn ghost sm" data-reject>Reject</button><button class="btn accent sm" data-approve>Approve → 100%</button></div></td>
+            </tr>
+            <tr>
+              <td><strong>Lower priority of "Media spend" factor by default for ice-cream-maker SKUs</strong><div style="font-size:12px; color:var(--ink-3); margin-top:4px;">scope: client:SharkNinja:ice_cream_maker · 6 of 7 thumbs-down on media surfacing</div></td>
+              <td><span class="pill pill-info">L2 constraint refinement</span></td>
+              <td class="mono">user feedback n=7</td>
+              <td><span class="pill pill-pos">Low</span></td>
+              <td><div style="display:flex; gap:6px;"><button class="btn ghost sm" data-reject>Reject</button><button class="btn accent sm" data-approve>Approve → canary</button></div></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section style="margin-top:40px;">
+      <div class="section-head"><h2>Currently in canary</h2><span class="count">2 changes</span></div>
+      <div class="table-wrap" style="margin-top:14px;">
+        <table class="table">
+          <thead><tr><th>Change</th><th>Started</th><th>Traffic share</th><th>Win rate</th><th>Auto-rollout</th></tr></thead>
+          <tbody>
+            <tr><td>Updated routing: "Top drivers" + recall combined</td><td class="mono">36h ago</td><td><span class="pill pill-acc">10%</span></td><td class="pos">+4 pp</td><td class="mono">in 12h</td></tr>
+            <tr><td>Promote PROMO_SIGNAL_IMPACT v2</td><td class="mono">8h ago</td><td><span class="pill pill-acc">10%</span></td><td class="pos">+1 pp</td><td class="mono">in 40h</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script src="../assets/app.js"></script>
+</body>
+</html>

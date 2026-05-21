@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Orchestrate · Brain admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body class="surface-admin">
+
+<header class="topbar">
+  <div class="topbar-inner" style="max-width:none">
+    <a href="../index.html" class="brand"><div class="brand-mark electric">B</div> Brain <span style="font-weight:400; color:var(--ink-3); margin-left:6px;">admin</span></a>
+    <span style="font-size:11px; color:var(--ink-3); font-family:var(--mono); margin-left:8px;">v0.1</span>
+    <div style="margin-left:auto; display:flex; align-items:center; gap:8px;">
+      <span class="chip" style="background:var(--accent-tint); color:var(--accent);">SharkNinja</span>
+      <a href="../index.html" class="btn ghost sm">← Customer view</a>
+    </div>
+  </div>
+</header>
+
+<div class="admin-layout">
+  <aside class="sidenav">
+    <div class="section-label">Brain</div>
+    <a href="./index.html">Overview</a>
+    <div class="section-label">Knowledge</div>
+    <a href="./memory.html"><span class="layer-num">L1</span> Memory <span class="badge">2.4k</span></a>
+    <div class="section-label">Authoring</div>
+    <a href="./composer.html"><span class="layer-num">L2</span> Composer <span class="badge">12</span></a>
+    <a href="./studio.html"><span class="layer-num">L2</span> Skill Studio <span class="badge">7</span></a>
+    <div class="section-label">Run-time</div>
+    <a href="./orchestrate.html" class="active"><span class="layer-num">L3</span> Orchestrate <span class="badge">218/d</span></a>
+    <a href="./outcomes.html"><span class="layer-num">L5</span> Outcomes <span class="badge">14</span></a>
+    <a href="./adapt.html"><span class="layer-num">L6</span> Adapt <span class="badge">3</span></a>
+  </aside>
+
+  <main class="admin-main">
+    <header class="admin-head">
+      <div>
+        <div class="meta">L3 · Meta-orchestration</div>
+        <h1>Orchestrate</h1>
+        <p>Every customer question that hits the Brain is routed across one or more agents. This is where you see what got matched, with what confidence, and what slipped through as novel — the entry point for mining new use cases.</p>
+      </div>
+      <div class="right">
+        <button class="btn ghost">Last 24h</button>
+        <button class="btn ghost">Export</button>
+      </div>
+    </header>
+
+    <div class="actions-stats" style="margin-bottom:24px;">
+      <div class="stat"><div class="l">Routed today</div><div class="v">218</div></div>
+      <div class="stat"><div class="l">Avg confidence</div><div class="v pos">0.87</div></div>
+      <div class="stat"><div class="l">Novel</div><div class="v acc">14<span class="unit">questions</span></div></div>
+      <div class="stat"><div class="l">P50 latency</div><div class="v">240ms</div></div>
+    </div>
+
+    <div class="tabs" data-tabs>
+      <button class="active" data-tab="feed">Decision feed</button>
+      <button data-tab="novel">Novel questions</button>
+      <button data-tab="router">Router config</button>
+    </div>
+
+    <section data-panel="feed">
+      <div class="table-wrap">
+        <table class="table">
+          <thead><tr><th style="width:90px">Time</th><th>Question</th><th>Routed to</th><th>Confidence</th><th>Latency</th><th>Outcome</th></tr></thead>
+          <tbody>
+            <tr>
+              <td class="mono">2m</td>
+              <td>Why did Ninja CREAMi miss plan last week?</td>
+              <td><span class="pill pill-info">RCA_FOR_SKU</span> + 5 supplemental</td>
+              <td><span class="pill pill-pos">0.92</span></td>
+              <td class="mono">3.1s</td>
+              <td><a href="#" class="chip">trace</a></td>
+            </tr>
+            <tr>
+              <td class="mono">3m</td>
+              <td>What's driving the gap in outdoor grill?</td>
+              <td><span class="pill pill-info">TOP_DRIVERS</span></td>
+              <td><span class="pill pill-pos">0.89</span></td>
+              <td class="mono">1.4s</td>
+              <td><a href="#" class="chip">trace</a></td>
+            </tr>
+            <tr>
+              <td class="mono">5m</td>
+              <td>How are we tracking this week vs plan?</td>
+              <td><span class="pill pill-info">RTS_PROJECTION</span> aggregation</td>
+              <td><span class="pill pill-pos">0.94</span></td>
+              <td class="mono">1.1s</td>
+              <td><a href="#" class="chip">trace</a></td>
+            </tr>
+            <tr style="background: var(--accent-tint);">
+              <td class="mono">6m</td>
+              <td>What's my projected gap by channel?</td>
+              <td><span class="pill pill-warn">No match · clarifier</span></td>
+              <td><span class="pill" style="background:var(--warn-tint); color:var(--warn);">0.41</span></td>
+              <td class="mono">280ms</td>
+              <td><a href="#" class="chip pill-acc">mine →</a></td>
+            </tr>
+            <tr>
+              <td class="mono">8m</td>
+              <td>Show me Shark FlexStyle ad spend</td>
+              <td><span class="pill pill-info">MEDIA_IMPACT</span></td>
+              <td><span class="pill pill-pos">0.91</span></td>
+              <td class="mono">2.0s</td>
+              <td><a href="#" class="chip">trace</a></td>
+            </tr>
+            <tr>
+              <td class="mono">12m</td>
+              <td>Is B08QXB9BH5 losing buy box?</td>
+              <td><span class="pill pill-info">LBB_SKU_LOOKUP</span></td>
+              <td><span class="pill pill-pos">0.97</span></td>
+              <td class="mono">820ms</td>
+              <td><a href="#" class="chip">trace</a></td>
+            </tr>
+            <tr style="background: var(--accent-tint);">
+              <td class="mono">15m</td>
+              <td>Compare promo cannibalization across brand levels</td>
+              <td><span class="pill pill-warn">No match · clarifier</span></td>
+              <td><span class="pill" style="background:var(--warn-tint); color:var(--warn);">0.38</span></td>
+              <td class="mono">260ms</td>
+              <td><a href="#" class="chip pill-acc">mine →</a></td>
+            </tr>
+            <tr>
+              <td class="mono">20m</td>
+              <td>Why is CREAMi traffic down?</td>
+              <td><span class="pill pill-info">RCA_FOR_SKU_HEADLINE</span> (episodic recall)</td>
+              <td><span class="pill pill-pos">0.95</span></td>
+              <td class="mono">120ms <span class="acc" style="font-weight:600">(replay)</span></td>
+              <td><a href="#" class="chip">trace</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section data-panel="novel" hidden>
+      <div class="panel-card" style="margin-bottom:20px;">
+        <h3>Novel-question mining</h3>
+        <h2>14 unmatched patterns this week</h2>
+        <p style="font-size:13px; color:var(--ink-2); margin-top:6px;">When the Router can't match with high confidence, the question is logged here. Once a pattern repeats N times, the Brain proposes a new use case draft to the Composer.</p>
+      </div>
+      <div class="table-wrap">
+        <table class="table">
+          <thead><tr><th>Pattern</th><th>Examples</th><th>Occurrences</th><th>Distinct users</th><th></th></tr></thead>
+          <tbody>
+            <tr><td><strong>Projected gap by channel</strong><div style="font-size:11px; color:var(--ink-3); margin-top:2px;">channel split not in any current use case</div></td><td class="mono" style="font-size:12px;">"projected gap by channel" · "how is each channel tracking"</td><td class="mono"><strong>8</strong></td><td class="mono">5</td><td><a href="./composer.html" class="btn accent sm">Mine → Composer</a></td></tr>
+            <tr><td><strong>Promo cannibalization across brand levels</strong></td><td class="mono" style="font-size:12px;">"compare promo halo across brands"</td><td class="mono"><strong>5</strong></td><td class="mono">3</td><td><a href="./composer.html" class="btn ghost sm">Mine</a></td></tr>
+            <tr><td><strong>Subscription LTV by category</strong></td><td class="mono" style="font-size:12px;">"subscribe-and-save LTV"</td><td class="mono"><strong>4</strong></td><td class="mono">2</td><td><a href="./composer.html" class="btn ghost sm">Mine</a></td></tr>
+            <tr><td><strong>Rebate impact on attribution</strong></td><td class="mono" style="font-size:12px;">"rebates effect on TACoS"</td><td class="mono">3</td><td class="mono">2</td><td><a href="./composer.html" class="btn ghost sm">Mine</a></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section data-panel="router" hidden>
+      <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px;">
+        <div class="panel-card">
+          <h3>Routing thresholds</h3>
+          <div class="form-row"><label class="form-label">Auto-route confidence</label><input class="input" value="≥ 0.75"></div>
+          <div class="form-row"><label class="form-label">Clarifier confidence</label><input class="input" value="0.45 – 0.75"></div>
+          <div class="form-row"><label class="form-label">Novel-question threshold</label><input class="input" value="&lt; 0.45"></div>
+          <div class="form-row"><label class="form-label">Mining trigger</label><input class="input" value="≥ 5 occurrences in 7 days"></div>
+        </div>
+        <div class="panel-card">
+          <h3>Replay (episodic recall)</h3>
+          <div class="form-row"><label class="form-label">Eligible after</label><input class="input" value="≥ 0.85 similarity to prior question"></div>
+          <div class="form-row"><label class="form-label">Freshness window</label><input class="input" value="≤ 24h since prior answer"></div>
+          <div class="form-row"><label class="form-label">Show banner</label><input class="input" value="Always (“We investigated this Xd ago…”)"></div>
+          <div style="display:flex; justify-content:flex-end;"><button class="btn accent">Save router config</button></div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script src="../assets/app.js"></script>
+</body>
+</html>
