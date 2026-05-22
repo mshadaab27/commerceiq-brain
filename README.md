@@ -8,6 +8,8 @@ A design prototype for a **Brain-like reasoning, memory, and learning layer** on
 The Brain's complexity stays behind the scenes; the analyst sees one calm page with answers and trackable recommendations.
 
 > **🔗 Live demo:** [mshadaab27.github.io/commerceiq-brain](https://mshadaab27.github.io/commerceiq-brain/)
+>
+> **📖 Architecture & design doc:** [BRAIN.md](./BRAIN.md) — the canonical explanation of what BRAIN is, why, the 6 layers, the outcome loop, and how it scales across products and tenants.
 
 ---
 
