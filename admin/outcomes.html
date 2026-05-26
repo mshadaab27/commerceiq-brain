@@ -8,6 +8,382 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../assets/styles.css">
+<style>
+  /* ============================================================
+     Outcomes admin v7 — platform shape
+     - Resource-oriented IA (sub-resources nested in sidebar)
+     - Master-detail layout (table + right inspector)
+     - Drop intro chrome, denser scan-and-drill workflow
+     ============================================================ */
+
+  /* Sub-resource items nested under Outcomes in sidebar */
+  .sidenav .sub {
+    padding: 6px 12px 6px 28px;
+    font-size: 12px; color: var(--ink-3); font-weight: 500;
+    border-radius: var(--r-sm);
+    display: flex; align-items: center; gap: 8px;
+    margin-left: 4px;
+  }
+  .sidenav .sub:hover { background: var(--bg-soft); color: var(--ink-2); }
+  .sidenav .sub.active { color: var(--accent); font-weight: 700; background: var(--accent-tint); }
+  .sidenav .sub .badge {
+    margin-left: auto; font-family: var(--mono); font-size: 9px;
+    padding: 1px 5px; border-radius: 3px;
+    background: var(--bg-soft); color: var(--ink-3); font-weight: 600;
+  }
+  .sidenav .sub.active .badge { background: white; color: var(--accent); }
+  .sidenav a.parent { font-weight: 700; }
+  .sidenav a.parent.active { background: transparent; color: var(--accent); }
+  .sidenav a.parent.active::before { background: var(--accent); }
+
+  /* Slim page header */
+  .platform-head {
+    display: flex; align-items: center; gap: 14px;
+    padding-bottom: var(--s-4);
+    border-bottom: 1px solid var(--line);
+    margin-bottom: var(--s-4);
+  }
+  .platform-head .breadcrumb {
+    font-size: 12px; color: var(--ink-3);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .platform-head .breadcrumb a { color: var(--ink-3); text-decoration: none; }
+  .platform-head .breadcrumb a:hover { color: var(--ink); }
+  .platform-head .breadcrumb .sep { color: var(--ink-4); }
+  .platform-head .breadcrumb .here { color: var(--ink); font-weight: 700; }
+  .platform-head .resource-count {
+    font-family: var(--mono); font-size: 11px;
+    color: var(--ink-3); padding: 2px 7px;
+    background: var(--bg-soft); border-radius: 4px; font-weight: 600;
+  }
+  .platform-head .actions {
+    margin-left: auto; display: flex; align-items: center; gap: 8px;
+  }
+  .platform-head .actions .review-chip {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 12px; color: var(--accent); font-weight: 600;
+    padding: 5px 10px; border-radius: var(--r-pill);
+    background: var(--accent-tint); text-decoration: none;
+  }
+  .platform-head .actions .review-chip:hover { background: var(--accent); color: white; }
+  .platform-head .actions .review-chip .num {
+    font-family: var(--mono); font-weight: 700;
+    background: white; padding: 0 5px; border-radius: 3px;
+    font-size: 10px;
+  }
+  .platform-head .actions .review-chip:hover .num { background: var(--accent-tint); color: var(--accent); }
+  .platform-head .actions .btn { font-size: 12px; padding: 6px 12px; }
+  .platform-head .actions .search-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 5px 10px; border-radius: var(--r-pill);
+    background: var(--bg-soft); color: var(--ink-3);
+    font-size: 11px; border: 1px solid var(--line);
+  }
+  .platform-head .actions .search-btn:hover { background: white; color: var(--ink); }
+  .platform-head .actions .search-btn .kbd-mini {
+    font-family: var(--mono); font-size: 9px;
+    padding: 1px 4px; background: white; color: var(--ink-3);
+    border-radius: 3px; border: 1px solid var(--line);
+  }
+
+  /* Inline mini stats row (super tight) */
+  .stats-inline {
+    display: flex; align-items: center; gap: 18px;
+    margin-bottom: var(--s-4);
+    font-size: 12px; color: var(--ink-3);
+  }
+  .stats-inline .stat-mi { display: flex; align-items: baseline; gap: 6px; }
+  .stats-inline .stat-mi .v {
+    font-size: 14px; font-weight: 700; color: var(--ink);
+    font-variant-numeric: tabular-nums;
+  }
+  .stats-inline .stat-mi .v.pos { color: var(--pos); }
+  .stats-inline .stat-mi .v.acc { color: var(--accent); }
+  .stats-inline .stat-mi .l { font-size: 11px; color: var(--ink-3); }
+  .stats-inline .stat-mi .sep { margin-left: 18px; color: var(--ink-4); }
+
+  /* Filter bar */
+  .filter-row {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 0; margin-bottom: 4px;
+    font-size: 12px;
+  }
+  .filter-row .lbl { font-size: 10px; text-transform: uppercase; letter-spacing: .1em; color: var(--ink-3); font-weight: 700; }
+  .filter-row .sep { color: var(--ink-4); margin: 0 2px; }
+  .filter-row .sort-info {
+    margin-left: auto; font-size: 11px; color: var(--ink-3);
+    display: flex; align-items: center; gap: 4px;
+  }
+  .filter-row .sort-info strong { color: var(--ink); font-weight: 700; }
+
+  /* Master-detail layout */
+  .master-detail {
+    display: grid; grid-template-columns: 1fr 440px;
+    gap: 0;
+    border: 1px solid var(--line);
+    border-radius: var(--r-md);
+    overflow: hidden;
+    background: var(--bg);
+  }
+  .master-detail.no-inspector { grid-template-columns: 1fr; }
+  .master-detail .resource-list { min-width: 0; }
+  .master-detail .inspector {
+    border-left: 1px solid var(--line);
+    background: var(--bg-soft);
+    max-height: 720px;
+    overflow-y: auto;
+    position: sticky; top: 80px;
+    animation: slideInRight .25s cubic-bezier(.2, 0, 0, 1);
+  }
+  @keyframes slideInRight {
+    from { opacity: 0; transform: translateX(12px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  /* Resource list table */
+  .res-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .res-table thead th {
+    text-align: left; padding: 10px 14px;
+    font-size: 10px; text-transform: uppercase; letter-spacing: .1em;
+    color: var(--ink-3); font-weight: 700;
+    background: var(--bg-soft);
+    border-bottom: 1px solid var(--line);
+    white-space: nowrap;
+    position: sticky; top: 0; z-index: 1;
+  }
+  .res-table tbody td {
+    padding: 12px 14px;
+    color: var(--ink);
+    border-bottom: 1px solid var(--line);
+    vertical-align: middle;
+  }
+  .res-table tbody tr {
+    cursor: pointer;
+    position: relative;
+    transition: background .12s ease;
+  }
+  .res-table tbody tr:hover { background: var(--bg-soft); }
+  .res-table tbody tr.selected {
+    background: var(--accent-tint);
+  }
+  .res-table tbody tr.selected td:first-child {
+    box-shadow: inset 3px 0 0 var(--accent);
+  }
+  .res-table tbody tr:last-child td { border-bottom: 0; }
+
+  .res-table .name-cell .nm { font-weight: 600; font-size: 13px; }
+  .res-table .name-cell .mt {
+    font-size: 11px; color: var(--ink-3); margin-top: 2px;
+    font-family: var(--mono);
+  }
+  .res-table .reason-tag {
+    display: inline-flex; font-size: 10px;
+    padding: 2px 7px; border-radius: var(--r-pill);
+    background: var(--bg-soft); color: var(--ink-2);
+    font-weight: 600;
+  }
+  .res-table .status-pill {
+    display: inline-flex; font-size: 10px;
+    padding: 2px 8px; border-radius: var(--r-pill);
+    font-weight: 700; text-transform: uppercase; letter-spacing: .04em;
+  }
+  .res-table .status-pill.live { background: var(--pos-tint); color: var(--pos); }
+  .res-table .status-pill.canary { background: var(--warn-tint); color: var(--warn); }
+  .res-table .status-pill.draft { background: var(--bg-soft); color: var(--ink-3); }
+  .res-table .status-pill.demoted { background: var(--neg-tint); color: var(--neg); }
+  .res-table .v-pos { color: var(--pos); font-weight: 700; font-variant-numeric: tabular-nums; }
+  .res-table .v-neg { color: var(--neg); font-weight: 700; font-variant-numeric: tabular-nums; }
+  .res-table .v-num {
+    font-variant-numeric: tabular-nums; font-weight: 600;
+    font-family: var(--mono); font-size: 12px;
+  }
+  .res-table .accuracy-pill {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-size: 11px; padding: 2px 7px; border-radius: var(--r-pill);
+    font-weight: 700; font-variant-numeric: tabular-nums;
+  }
+  .res-table .accuracy-pill.ok { background: var(--pos-tint); color: var(--pos); }
+  .res-table .accuracy-pill.warn { background: var(--warn-tint); color: var(--warn); }
+  .res-table .accuracy-pill.muted { background: var(--bg-soft); color: var(--ink-3); }
+  .res-table .metric-pill {
+    display: inline-flex; font-size: 10px;
+    padding: 2px 7px; border-radius: var(--r-pill);
+    font-weight: 700;
+    background: var(--accent-tint); color: var(--accent);
+  }
+  .res-table .metric-pill.gv { background: var(--sky-tint); color: var(--cobalt); }
+  .res-table .metric-pill.cvr { background: var(--accent-tint); color: var(--accent); }
+  .res-table .metric-pill.asp { background: rgba(185, 152, 255, .25); color: #6D28D9; }
+  .res-table .metric-pill.oos { background: var(--pos-tint); color: var(--pos); }
+  .res-table .metric-pill.na { background: var(--bg-soft); color: var(--ink-3); }
+  .res-table .scope {
+    font-family: var(--mono); font-size: 11px;
+    color: var(--ink-3);
+  }
+  .res-table .scope.client { color: var(--cobalt); }
+
+  /* Inspector */
+  .inspector-head {
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--line);
+    background: var(--bg);
+    display: flex; align-items: center; gap: 10px;
+  }
+  .inspector-head .title {
+    font-size: 14px; font-weight: 700; color: var(--ink);
+  }
+  .inspector-head .id {
+    font-family: var(--mono); font-size: 10px;
+    color: var(--ink-3); padding: 1px 5px;
+    background: var(--bg-soft); border-radius: 3px;
+  }
+  .inspector-head .x {
+    margin-left: auto;
+    width: 24px; height: 24px; border-radius: 6px;
+    display: grid; place-items: center;
+    color: var(--ink-3); background: transparent;
+    cursor: pointer; border: 0;
+  }
+  .inspector-head .x:hover { background: var(--bg-soft); color: var(--ink); }
+
+  .inspector-section {
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--line);
+  }
+  .inspector-section:last-child { border-bottom: 0; }
+  .inspector-section .h {
+    font-size: 10px; text-transform: uppercase; letter-spacing: .12em;
+    color: var(--ink-3); font-weight: 700;
+    margin-bottom: 8px;
+    display: flex; align-items: baseline; justify-content: space-between;
+  }
+  .inspector-section .h .edit {
+    font-size: 11px; color: var(--accent); font-weight: 600;
+    text-decoration: none; letter-spacing: 0; text-transform: none;
+  }
+  .inspector-section .h .edit:hover { text-decoration: underline; }
+
+  .ins-kv { display: grid; grid-template-columns: 100px 1fr; gap: 6px 12px; font-size: 12px; }
+  .ins-kv .k { color: var(--ink-3); font-weight: 600; }
+  .ins-kv .v { color: var(--ink); font-weight: 500; }
+  .ins-kv .v.mono { font-family: var(--mono); font-size: 11px; }
+  .ins-kv .v.acc { color: var(--accent); font-weight: 700; }
+
+  /* Action options stacked in inspector */
+  .ins-actions { display: flex; flex-direction: column; gap: 8px; }
+  .ins-action {
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: var(--r-sm);
+    padding: 10px 12px;
+  }
+  .ins-action.most { border-color: var(--accent); background: var(--accent-tint); }
+  .ins-action .ah {
+    display: flex; align-items: center; gap: 8px;
+    margin-bottom: 4px;
+  }
+  .ins-action .crit-mini {
+    font-size: 9px; padding: 1px 6px; border-radius: var(--r-pill);
+    font-weight: 800; text-transform: uppercase; letter-spacing: .04em;
+  }
+  .ins-action .crit-mini.aggressive { background: var(--neg-tint); color: var(--neg); }
+  .ins-action .crit-mini.moderate { background: var(--accent-tint); color: var(--accent); }
+  .ins-action .crit-mini.most { background: var(--accent); color: white; }
+  .ins-action .crit-mini.conservative { background: var(--bg-soft); color: var(--ink-3); }
+  .ins-action .nm { font-size: 13px; font-weight: 700; color: var(--ink); }
+  .ins-action .perf {
+    margin-top: 6px;
+    display: flex; gap: 10px;
+    font-size: 11px; color: var(--ink-3);
+  }
+  .ins-action .perf b { color: var(--ink); font-weight: 700; }
+  .ins-action .perf .pos { color: var(--pos); }
+  .ins-action .perf .neg { color: var(--neg); }
+
+  /* Attribution mini-block in inspector */
+  .ins-attrib {
+    display: grid; grid-template-columns: auto 1fr;
+    gap: 14px; align-items: center;
+    padding: 12px;
+    background: var(--accent-tint);
+    border-radius: var(--r-sm);
+  }
+  .ins-attrib .coef-block { text-align: center; }
+  .ins-attrib .coef-block .lbl {
+    font-size: 9px; text-transform: uppercase; letter-spacing: .1em;
+    color: var(--accent); font-weight: 700;
+  }
+  .ins-attrib .coef-block .coef {
+    font-size: 24px; font-weight: 800; color: var(--accent);
+    font-variant-numeric: tabular-nums; line-height: 1;
+  }
+  .ins-attrib .explain {
+    font-size: 12px; color: var(--ink-2); line-height: 1.45;
+  }
+  .ins-attrib .explain code {
+    font-family: var(--mono); font-size: 11px;
+    background: white; padding: 1px 5px; border-radius: 3px;
+  }
+
+  /* Outcome mini-list */
+  .ins-outcomes { display: flex; flex-direction: column; gap: 4px; }
+  .ins-outcome {
+    display: grid; grid-template-columns: 1fr auto auto;
+    gap: 8px; align-items: center;
+    padding: 6px 0;
+    font-size: 11px;
+    border-bottom: 1px dashed var(--line);
+  }
+  .ins-outcome:last-child { border-bottom: 0; }
+  .ins-outcome .o-name { color: var(--ink); font-weight: 600; }
+  .ins-outcome .o-mt { color: var(--ink-3); font-family: var(--mono); font-size: 10px; }
+  .ins-outcome .o-v { font-weight: 700; font-variant-numeric: tabular-nums; }
+  .ins-outcome .o-v.pos { color: var(--pos); }
+  .ins-outcome .o-v.neg { color: var(--neg); }
+  .ins-outcome .o-status {
+    font-size: 9px; padding: 1px 6px; border-radius: var(--r-pill);
+    font-weight: 700; text-transform: uppercase; letter-spacing: .04em;
+  }
+  .ins-outcome .o-status.live { background: var(--accent-tint); color: var(--accent); }
+  .ins-outcome .o-status.worked { background: var(--pos-tint); color: var(--pos); }
+  .ins-outcome .o-status.failed { background: var(--neg-tint); color: var(--neg); }
+
+  /* Formula expression display */
+  .formula-code {
+    font-family: var(--mono); font-size: 11px;
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: var(--r-sm);
+    padding: 10px 12px;
+    color: var(--ink-2); line-height: 1.6;
+    white-space: pre-wrap;
+  }
+  .formula-code .var { color: var(--accent); font-weight: 700; }
+  .formula-code .op { color: var(--ink-3); }
+  .formula-code .cmt { color: var(--ink-3); font-style: italic; }
+
+  /* Resource heading between sections */
+  .resource-heading {
+    display: flex; align-items: baseline; gap: 10px;
+    margin: 32px 0 14px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--line);
+  }
+  .resource-heading h3 {
+    font-size: 12px; text-transform: uppercase; letter-spacing: .14em;
+    color: var(--ink); font-weight: 700;
+  }
+  .resource-heading .count { font-family: var(--mono); font-size: 11px; color: var(--ink-3); }
+  .resource-heading .tease {
+    margin-left: auto;
+    font-size: 11px; color: var(--ink-3);
+  }
+
+  @media (max-width: 1280px) {
+    .master-detail { grid-template-columns: 1fr; }
+    .master-detail .inspector { border-left: 0; border-top: 1px solid var(--line); }
+  }
+</style>
 </head>
 <body class="surface-admin">
 
@@ -23,7 +399,7 @@
 </header>
 
 <div class="admin-layout">
-  <aside class="sidenav">
+  <aside class="sidenav" aria-label="Brain admin navigation">
     <div class="section-label">Brain</div>
     <a href="./index.html">Overview</a>
     <div class="section-label">Knowledge</div>
@@ -33,85 +409,797 @@
     <a href="./studio.html"><span class="layer-num">L2</span> Skill Studio <span class="badge">7</span></a>
     <div class="section-label">Run-time</div>
     <a href="./orchestrate.html"><span class="layer-num">L3</span> Orchestrate <span class="badge">218/d</span></a>
-    <a href="./outcomes.html" class="active"><span class="layer-num">L5</span> Outcomes <span class="badge">14</span></a>
+    <a href="./outcomes.html" class="active parent"><span class="layer-num">L5</span> Outcomes</a>
+    <a href="#playbooks" class="sub active">Playbooks <span class="badge">6</span></a>
+    <a href="#outcomes-list" class="sub">Outcomes <span class="badge">14</span></a>
+    <a href="#formulas" class="sub">Impact formulas <span class="badge">8</span></a>
+    <a href="#coefficients" class="sub">Coefficients <span class="badge">6</span></a>
+    <a href="#reviews" class="sub">Reviews <span class="badge">3</span></a>
     <a href="./adapt.html"><span class="layer-num">L6</span> Adapt <span class="badge">3</span></a>
   </aside>
 
   <main class="admin-main">
-    <header class="admin-head">
-      <div>
-        <div class="meta">L5 · Outcome tracking</div>
-        <h1>Outcomes</h1>
-        <p>The loop that makes the Brain smarter. Every recommendation a customer accepts is logged with predicted impact, baseline metrics, and a measurement method — then the Brain measures the actual lift and feeds the result back into the causal graph.</p>
-      </div>
-      <div class="right">
-        <button class="btn ghost">Methodology</button>
-      </div>
-    </header>
 
-    <div class="actions-stats" style="margin-bottom:24px;">
-      <div class="stat"><div class="l">In flight</div><div class="v acc">14</div></div>
-      <div class="stat"><div class="l">Worked rate</div><div class="v pos">62%</div></div>
-      <div class="stat"><div class="l">Cumulative recovered $</div><div class="v pos">$1.8M</div></div>
-      <div class="stat"><div class="l">Belief updates</div><div class="v">28<span class="unit">this mo</span></div></div>
+    <!-- ============ SLIM HEADER ============ -->
+    <div class="platform-head">
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="./outcomes.html">Outcomes</a>
+        <svg class="icon-sm sep" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg>
+        <span class="here">Playbooks</span>
+      </nav>
+      <span class="resource-count">6</span>
+      <div class="actions">
+        <a href="#reviews" class="review-chip">
+          <span class="num">3</span>
+          pending review
+        </a>
+        <button type="button" class="search-btn">
+          <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+          Search
+          <span class="kbd-mini">⌘K</span>
+        </button>
+        <button type="button" class="btn accent" data-modal-open="new-pb">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+          New playbook
+        </button>
+      </div>
     </div>
 
-    <div class="section-head"><h2>Action log</h2><span class="count">last 30 days</span>
-      <div class="right" data-chip-group>
-        <button class="chip active">All status</button>
-        <button class="chip">In flight</button>
-        <button class="chip">Measured</button>
-        <button class="chip">Did not work</button>
-      </div>
-    </div>
-    <div class="table-wrap" style="margin-top:14px;">
-      <table class="table">
-        <thead><tr><th>Taken</th><th>Action</th><th>SKU</th><th>Tenant</th><th>Method</th><th>Predicted</th><th>Measured</th><th>Belief Δ</th><th>Status</th></tr></thead>
-        <tbody>
-          <tr><td class="mono">May 17</td><td>Fix deal badge</td><td class="mono">B0DSJW8SFG</td><td>SharkNinja</td><td>Synthetic control · 12 donors</td><td>+8–15%</td><td class="pos tabular">+9.2%</td><td class="acc mono">+0.07</td><td><span class="pill pill-warn">Day 4 / 7</span></td></tr>
-          <tr><td class="mono">May 20</td><td>Reactivate Matching event</td><td class="mono">B08QXB9BH5</td><td>SharkNinja</td><td>Synthetic control · 9 donors</td><td>+8–15%</td><td class="mono">measuring</td><td class="mono">—</td><td><span class="pill pill-warn">Day 1 / 7</span></td></tr>
-          <tr><td class="mono">May 7</td><td>Boost ad spend (P0 kw)</td><td class="mono">B0GHPM2C3Y</td><td>SharkNinja</td><td>Synthetic control · 14 donors</td><td>+6%</td><td class="pos tabular">+11.3%</td><td class="acc mono">+0.07</td><td><span class="pill pill-pos">Measured</span></td></tr>
-          <tr><td class="mono">May 6</td><td>Restore parent ASIN promo</td><td class="mono">B07YT83K4Z</td><td>SharkNinja</td><td>Pre/post trend</td><td>+10%</td><td class="pos tabular">+14.8%</td><td class="acc mono">+0.05</td><td><span class="pill pill-pos">Measured</span></td></tr>
-          <tr><td class="mono">May 5</td><td>Match competitor price</td><td class="mono">B09HQR2X4N</td><td>SharkNinja</td><td>Synthetic control · 11 donors</td><td>+5%</td><td class="neg tabular">−2.1%</td><td class="mono" style="color:var(--neg)">−0.04</td><td><span class="pill" style="background:var(--neg-tint); color:var(--neg);">Did not work</span></td></tr>
-          <tr><td class="mono">May 1</td><td>Add A+ content</td><td class="mono">B0CRSPK22</td><td>SharkNinja</td><td>Pre/post simple</td><td>+4%</td><td class="pos tabular">+3.9%</td><td class="acc mono">+0.02</td><td><span class="pill pill-pos">Measured</span></td></tr>
-          <tr><td class="mono">Apr 28</td><td>Replenish inventory</td><td class="mono">B0HQ8KJ4</td><td>P&amp;G</td><td>Synthetic control · 8 donors</td><td>+7%</td><td class="pos tabular">+8.4%</td><td class="acc mono">+0.03</td><td><span class="pill pill-pos">Measured</span></td></tr>
-          <tr><td class="mono">Apr 25</td><td>Update title keyword</td><td class="mono">B0LMNQ3T</td><td>Unilever</td><td>Pre/post trend</td><td>+3%</td><td class="pos tabular">+4.1%</td><td class="acc mono">+0.01</td><td><span class="pill pill-pos">Measured</span></td></tr>
-        </tbody>
-      </table>
+    <!-- ============ STATS INLINE ============ -->
+    <div class="stats-inline">
+      <div class="stat-mi"><span class="v">6</span> <span class="l">playbooks</span></div>
+      <div class="stat-mi"><span class="v">14</span> <span class="l">outcomes (30d)</span></div>
+      <div class="stat-mi"><span class="v pos">73%</span> <span class="l">worked rate</span></div>
+      <div class="stat-mi"><span class="v">$1.82M</span> <span class="l">gross</span></div>
+      <div class="stat-mi"><span class="v pos">$1.42M</span> <span class="l">net attributed</span></div>
+      <div class="stat-mi"><span class="v acc">±17%</span> <span class="l">avg accuracy</span></div>
     </div>
 
-    <section style="margin-top:32px;">
-      <div class="section-head"><h2>Methodology audit · a single action</h2></div>
-      <div class="panel-card" style="margin-top:14px;">
-        <h3>Action #18173 · fix_deal_badge</h3>
-        <h2 style="font-size:16px;">Ninja CREAMi Scoop &amp; Swirl · B0DSJW8SFG · SharkNinja</h2>
-        <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:16px; margin-top:20px;">
-          <div>
-            <div class="help">Predicted lift (band)</div>
-            <div style="font-weight:700; font-size:18px; margin-top:4px;" class="pos">+8 – 15%</div>
-            <div style="font-size:12px; color:var(--ink-3); margin-top:6px;">Derived from learned strength of <strong>deal_badge_present → ops</strong> edge in KG.</div>
-          </div>
-          <div>
-            <div class="help">Counterfactual method</div>
-            <div style="font-weight:700; font-size:16px; margin-top:4px;">Synthetic control</div>
-            <div style="font-size:12px; color:var(--ink-3); margin-top:6px;">12 donor SKUs with similar pre-period OPS trajectory and no deal-badge fix in window.</div>
-          </div>
-          <div>
-            <div class="help">Significance</div>
-            <div style="font-weight:700; font-size:18px; margin-top:4px;" class="pos">p=0.04</div>
-            <div style="font-size:12px; color:var(--ink-3); margin-top:6px;">Permutation test · 10,000 reshuffles · day 4 of 7.</div>
-          </div>
+    <!-- ============ PLAYBOOKS RESOURCE ============ -->
+    <section id="playbooks">
+      <div class="filter-row">
+        <span class="lbl">Filter</span>
+        <div data-chip-group style="display:flex; gap:4px;">
+          <button type="button" class="chip active">All</button>
+          <button type="button" class="chip">Promo</button>
+          <button type="button" class="chip">Inventory</button>
+          <button type="button" class="chip">Media</button>
+          <button type="button" class="chip">Content</button>
+          <button type="button" class="chip">BuyBox</button>
         </div>
-        <hr style="margin:24px 0">
-        <div class="help">Donor pool</div>
-        <div class="code mono" style="margin-top:6px;">B0DSJW9AAA, B0DSJW8XYZ, B07YT83K4Z, B0CRSPK22, B09P2VYY, B0F8N4WW, B0G2XKQR, B0HRTJ5Z, B0K3MWQ8, B0LP3SD1, B0M9VVK4, B0NRQXSA</div>
-        <p style="font-size:12px; color:var(--ink-3); margin-top:10px;">Donor weights computed via constrained regression on the pre-period window. Pool quality score: <strong>0.91</strong>.</p>
+        <span class="sep">|</span>
+        <span class="lbl">Status</span>
+        <div data-chip-group style="display:flex; gap:4px;">
+          <button type="button" class="chip active">All</button>
+          <button type="button" class="chip">Live</button>
+          <button type="button" class="chip">Canary</button>
+        </div>
+        <div class="sort-info">Sort: <strong>Outcome count ↓</strong></div>
+      </div>
+
+      <div class="master-detail">
+        <!-- LEFT: Resource table -->
+        <div class="resource-list">
+          <table class="res-table">
+            <thead>
+              <tr>
+                <th>Playbook</th>
+                <th>Reason</th>
+                <th>Status</th>
+                <th style="text-align:right">Outcomes</th>
+                <th style="text-align:right">Worked</th>
+                <th style="text-align:right">Avg lift</th>
+                <th>Scope</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="selected">
+                <td class="name-cell"><div class="nm">Deal badge missing 7/7</div><div class="mt">pb_deal_badge_7_7</div></td>
+                <td><span class="reason-tag">Promo</span></td>
+                <td><span class="status-pill live">Live</span></td>
+                <td style="text-align:right" class="v-num">12</td>
+                <td style="text-align:right" class="v-pos">75%</td>
+                <td style="text-align:right" class="v-pos">+$32K</td>
+                <td><span class="scope client">client:SharkNinja</span></td>
+              </tr>
+              <tr>
+                <td class="name-cell"><div class="nm">Promo dropoff + LBB</div><div class="mt">pb_promo_lbb</div></td>
+                <td><span class="reason-tag">Promo</span></td>
+                <td><span class="status-pill live">Live</span></td>
+                <td style="text-align:right" class="v-num">5</td>
+                <td style="text-align:right" class="v-num">50%</td>
+                <td style="text-align:right" class="v-pos">+$22K</td>
+                <td><span class="scope client">client:SharkNinja</span></td>
+              </tr>
+              <tr>
+                <td class="name-cell"><div class="nm">KW rank slip + flat spend</div><div class="mt">pb_kw_rank_media</div></td>
+                <td><span class="reason-tag">Media</span></td>
+                <td><span class="status-pill live">Live</span></td>
+                <td style="text-align:right" class="v-num">4</td>
+                <td style="text-align:right" class="v-pos">100%</td>
+                <td style="text-align:right" class="v-pos">+$47K</td>
+                <td><span class="scope">global</span></td>
+              </tr>
+              <tr>
+                <td class="name-cell"><div class="nm">WoC &lt; 1 week</div><div class="mt">pb_woc_inventory</div></td>
+                <td><span class="reason-tag">Inventory</span></td>
+                <td><span class="status-pill live">Live</span></td>
+                <td style="text-align:right" class="v-num">3</td>
+                <td style="text-align:right" class="v-pos">100%</td>
+                <td style="text-align:right" class="v-pos">+$78K</td>
+                <td><span class="scope">global</span></td>
+              </tr>
+              <tr>
+                <td class="name-cell"><div class="nm">Content score &lt; 50</div><div class="mt">pb_content_score</div></td>
+                <td><span class="reason-tag">Content</span></td>
+                <td><span class="status-pill canary">Canary</span></td>
+                <td style="text-align:right" class="v-num">1</td>
+                <td style="text-align:right" class="v-pos">100%</td>
+                <td style="text-align:right" class="v-pos">+$19K</td>
+                <td><span class="scope client">client:SharkNinja</span></td>
+              </tr>
+              <tr>
+                <td class="name-cell"><div class="nm">Lost buy box · price</div><div class="mt">pb_lbb_price</div></td>
+                <td><span class="reason-tag">BuyBox</span></td>
+                <td><span class="status-pill demoted">Underperforming</span></td>
+                <td style="text-align:right" class="v-num">1</td>
+                <td style="text-align:right" class="v-num">0%</td>
+                <td style="text-align:right" class="v-neg">−$2K</td>
+                <td><span class="scope">global</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- RIGHT: Inspector -->
+        <aside class="inspector" aria-label="Selected playbook detail">
+          <header class="inspector-head">
+            <span class="title">Deal badge missing 7/7</span>
+            <span class="id">pb_deal_badge_7_7</span>
+            <button type="button" class="x" aria-label="Close inspector">
+              <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+            </button>
+          </header>
+
+          <div class="inspector-section">
+            <div class="h">Trigger <a href="#" class="edit">edit →</a></div>
+            <div class="ins-kv">
+              <div class="k">Alert</div><div class="v">Deal badge missing 7/7 days</div>
+              <div class="k">Reason</div><div class="v">Promo · deal-page visibility</div>
+              <div class="k">Criteria</div><div class="v mono">badge_absent_days ≥ 7 AND active_promo_flag</div>
+              <div class="k">Author</div><div class="v">Priya Shah · Apr 8</div>
+              <div class="k">Last edit</div><div class="v">Marcus Lee · 2d ago</div>
+            </div>
+          </div>
+
+          <div class="inspector-section">
+            <div class="h">Actions <span style="font-family:var(--mono); font-weight:600; color:var(--ink-3); font-size:10px;">3 options</span></div>
+            <div class="ins-actions">
+              <div class="ins-action most">
+                <div class="ah">
+                  <span class="crit-mini most">Moderate · most used</span>
+                </div>
+                <div class="nm">Restore deal badge in SAS</div>
+                <div class="perf">
+                  <span>Used <b>12×</b></span>
+                  <span>Worked <b class="pos">75%</b></span>
+                  <span>Avg <b class="pos">+$32K</b></span>
+                </div>
+              </div>
+              <div class="ins-action">
+                <div class="ah">
+                  <span class="crit-mini aggressive">Aggressive</span>
+                </div>
+                <div class="nm">Republish + match comp price</div>
+                <div class="perf">
+                  <span>Used <b>3×</b></span>
+                  <span>Worked <b>33%</b></span>
+                  <span>Avg <b class="neg">−$8K</b></span>
+                </div>
+              </div>
+              <div class="ins-action">
+                <div class="ah">
+                  <span class="crit-mini conservative">Conservative</span>
+                </div>
+                <div class="nm">Wait + monitor 48h</div>
+                <div class="perf">
+                  <span style="color:var(--ink-3)">Used <b style="color:var(--ink-3)">0×</b></span>
+                  <span style="color:var(--ink-3)">never picked</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="inspector-section">
+            <div class="h">Measurement</div>
+            <div class="ins-kv">
+              <div class="k">Method</div><div class="v">Synthetic control</div>
+              <div class="k">Window</div><div class="v">7 days post-action</div>
+              <div class="k">Pre-period</div><div class="v">14 days rolling</div>
+              <div class="k">Min donors</div><div class="v mono">10 (avg 12)</div>
+              <div class="k">Significance</div><div class="v mono">p &lt; 0.05</div>
+            </div>
+          </div>
+
+          <div class="inspector-section">
+            <div class="h">Attribution <a href="#coefficients" class="edit">view coefficient →</a></div>
+            <div class="ins-attrib">
+              <div class="coef-block">
+                <div class="lbl">Promo</div>
+                <div class="coef">0.80</div>
+              </div>
+              <div class="explain">
+                We credit <strong>80%</strong> of any lift to alerts in this playbook.<br>
+                <span style="color:var(--ink-3); font-size:11px;">Inherited from global Promo coefficient · confidence 0.85</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="inspector-section">
+            <div class="h">Impact formula <a href="#formulas" class="edit">view formula →</a></div>
+            <div class="ins-kv">
+              <div class="k">Primary metric</div><div class="v"><span class="metric-pill cvr" style="font-size:10px;">CVR</span></div>
+              <div class="k">Formula</div><div class="v mono" style="font-size:10px;">badge_uplift × failure_share × days_remaining</div>
+              <div class="k">Accuracy</div><div class="v acc">±15% over 8/10 outcomes</div>
+            </div>
+          </div>
+
+          <div class="inspector-section">
+            <div class="h">Live outcomes <span style="font-family:var(--mono); font-weight:600; color:var(--ink-3); font-size:10px;">12 · last 90d</span></div>
+            <div class="ins-outcomes">
+              <div class="ins-outcome">
+                <div><div class="o-name">B0DSJW8SFG · Moderate</div><div class="o-mt">May 17 · day 4/7</div></div>
+                <div class="o-v pos">+$46.4K</div>
+                <div class="o-status live">Live</div>
+              </div>
+              <div class="ins-outcome">
+                <div><div class="o-name">B07YT83K4Z · Moderate</div><div class="o-mt">May 8 · closed</div></div>
+                <div class="o-v pos">+$95.2K</div>
+                <div class="o-status worked">Worked</div>
+              </div>
+              <div class="ins-outcome">
+                <div><div class="o-name">B0KKWWRX5 · Aggressive</div><div class="o-mt">May 5 · closed</div></div>
+                <div class="o-v neg">−$11.2K</div>
+                <div class="o-status failed">Failed</div>
+              </div>
+              <div class="ins-outcome">
+                <div><div class="o-name">B0L21M3X8 · Moderate</div><div class="o-mt">May 4 · closed</div></div>
+                <div class="o-v pos">+$24.1K</div>
+                <div class="o-status worked">Worked</div>
+              </div>
+              <div class="ins-outcome">
+                <div><div class="o-name">B0M4Q2R8X · Moderate</div><div class="o-mt">Apr 29 · closed</div></div>
+                <div class="o-v pos">+$32.8K</div>
+                <div class="o-status worked">Worked</div>
+              </div>
+            </div>
+            <a href="#" style="display:inline-block; margin-top:8px; font-size:11px; color:var(--accent); font-weight:600; text-decoration:none;">View all 12 →</a>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- ============ IMPACT FORMULAS RESOURCE (new) ============ -->
+    <section id="formulas">
+      <div class="resource-heading">
+        <h3>Impact formulas</h3>
+        <span class="count">8 of 11 · 3 exceptions</span>
+        <div class="tease">Same scan-and-inspect pattern · click a row to see formula detail</div>
+      </div>
+
+      <div class="filter-row" style="padding-top:0;">
+        <span class="lbl">Primary metric</span>
+        <div data-chip-group style="display:flex; gap:4px;">
+          <button type="button" class="chip active">All</button>
+          <button type="button" class="chip">CVR</button>
+          <button type="button" class="chip">GV</button>
+          <button type="button" class="chip">ASP</button>
+        </div>
+        <span class="sep">|</span>
+        <span class="lbl">Status</span>
+        <div data-chip-group style="display:flex; gap:4px;">
+          <button type="button" class="chip active">All</button>
+          <button type="button" class="chip">Live</button>
+          <button type="button" class="chip">Canary</button>
+          <button type="button" class="chip">Exception</button>
+        </div>
+        <div class="sort-info">Sort: <strong>Accuracy ↓</strong></div>
+      </div>
+
+      <div class="master-detail">
+        <div class="resource-list">
+          <table class="res-table">
+            <thead>
+              <tr>
+                <th>Alert / formula</th>
+                <th>Primary metric</th>
+                <th>Reason coef</th>
+                <th style="text-align:right">Outcomes</th>
+                <th>Accuracy</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody data-render="formulas-table"></tbody>
+          </table>
+        </div>
+
+        <aside class="inspector" aria-label="Selected formula detail" data-render="formula-inspector">
+          <div data-render="formula-inspector-body"></div>
+        </aside>
+
+        <!-- legacy static inspector below — superseded by data-render hook above; role="none" prevents duplicate landmark -->
+        <aside class="inspector" hidden role="none">
+          <header class="inspector-head">
+            <span class="title">Lost Buy Box</span>
+            <span class="id">f_lost_buy_box</span>
+            <button type="button" class="x" aria-label="Close inspector">
+              <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+            </button>
+          </header>
+
+          <div class="inspector-section">
+            <div class="h">Identity</div>
+            <div class="ins-kv">
+              <div class="k">Primary metric</div><div class="v"><span class="metric-pill cvr" style="font-size:11px;">CVR</span></div>
+              <div class="k">Reason</div><div class="v">BuyBox <span class="v acc" style="font-family:var(--mono); margin-left:6px;">coef 0.85</span></div>
+              <div class="k">Scope</div><div class="v mono">global</div>
+              <div class="k">Status</div><div class="v"><span class="status-pill live">Live</span></div>
+              <div class="k">Version</div><div class="v mono">v3 · published May 12</div>
+            </div>
+          </div>
+
+          <div class="inspector-section">
+            <div class="h">Expression <a href="#" class="edit">edit →</a></div>
+            <div class="formula-code"><span class="cmt">// primary expression</span>
+<span class="var">at_risk_$</span> <span class="op">=</span> <span class="var">days_LBB_projected</span>
+         <span class="op">×</span> (<span class="var">pre_LBB_daily_OPS</span>
+            <span class="op">−</span> <span class="var">during_LBB_daily_OPS</span>)
+
+<span class="cmt">// fallback if no prior LBB event</span>
+<span class="var">at_risk_$</span> <span class="op">=</span> <span class="var">pre_LBB_daily_OPS</span>
+         <span class="op">×</span> <span class="var">LBB%_observed</span>
+         <span class="op">×</span> <span class="var">sub_category_CVR_delta</span>
+         <span class="op">×</span> <span class="var">days_projected</span></div>
+          </div>
+
+          <div class="inspector-section">
+            <div class="h">Constants <span style="font-family:var(--mono); font-weight:600; color:var(--ink-3); font-size:10px;">none required</span></div>
+            <div style="font-size:12px; color:var(--ink-3); line-height:1.5;">This formula uses observed values only — no empirical constants needed. Predictive accuracy is naturally high (±12%) because the math is direct subtraction.</div>
+          </div>
+
+          <div class="inspector-section">
+            <div class="h">Accuracy history <a href="#" class="edit">view trend →</a></div>
+            <div class="ins-kv">
+              <div class="k">Rolling 30</div><div class="v acc">±12% · 8 of 10 within band</div>
+              <div class="k">Mean APE</div><div class="v mono">11.4%</div>
+              <div class="k">Bias</div><div class="v mono">+3.2% (slight over-predict)</div>
+              <div class="k">Last refresh</div><div class="v mono">May 18</div>
+            </div>
+          </div>
+
+          <div class="inspector-section">
+            <div class="h">Validation outcomes <span style="font-family:var(--mono); font-weight:600; color:var(--ink-3); font-size:10px;">last 5</span></div>
+            <div class="ins-outcomes">
+              <div class="ins-outcome">
+                <div><div class="o-name">B0DSJW8SFG</div><div class="o-mt">pred $54K → act $46K (15% under)</div></div>
+                <div class="o-v pos">+$46K</div>
+                <div class="o-status worked">✅</div>
+              </div>
+              <div class="ins-outcome">
+                <div><div class="o-name">B07YT83K4Z</div><div class="o-mt">pred $90K → act $95K (6% over)</div></div>
+                <div class="o-v pos">+$95K</div>
+                <div class="o-status worked">✅</div>
+              </div>
+              <div class="ins-outcome">
+                <div><div class="o-name">B0M4Q2R8X</div><div class="o-mt">pred $35K → act $33K (6% under)</div></div>
+                <div class="o-v pos">+$33K</div>
+                <div class="o-status worked">✅</div>
+              </div>
+              <div class="ins-outcome">
+                <div><div class="o-name">B0KKWWRX5</div><div class="o-mt">pred $20K → act −$11K (miss)</div></div>
+                <div class="o-v neg">−$11K</div>
+                <div class="o-status failed">❌</div>
+              </div>
+              <div class="ins-outcome">
+                <div><div class="o-name">B0L21M3X8</div><div class="o-mt">pred $26K → act $24K (8% under)</div></div>
+                <div class="o-v pos">+$24K</div>
+                <div class="o-status worked">✅</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="inspector-section">
+            <div class="h">Used in playbooks <span style="font-family:var(--mono); font-weight:600; color:var(--ink-3); font-size:10px;">3</span></div>
+            <div class="ins-outcomes">
+              <div class="ins-outcome">
+                <div><div class="o-name">Lost buy box · price</div><div class="o-mt">pb_lbb_price</div></div>
+                <div></div>
+                <div><a href="#playbooks" style="color:var(--accent); font-size:10px; font-weight:600; text-decoration:none;">view →</a></div>
+              </div>
+              <div class="ins-outcome">
+                <div><div class="o-name">Promo dropoff + LBB</div><div class="o-mt">pb_promo_lbb</div></div>
+                <div></div>
+                <div><a href="#playbooks" style="color:var(--accent); font-size:10px; font-weight:600; text-decoration:none;">view →</a></div>
+              </div>
+              <div class="ins-outcome">
+                <div><div class="o-name">Multi-issue · LBB component</div><div class="o-mt">pb_multi_lbb</div></div>
+                <div></div>
+                <div><a href="#playbooks" style="color:var(--accent); font-size:10px; font-weight:600; text-decoration:none;">view →</a></div>
+              </div>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- ============ COEFFICIENTS RESOURCE ============ -->
+    <section id="coefficients">
+      <div class="resource-heading">
+        <h3>Attribution coefficients</h3>
+        <span class="count">6 reasons</span>
+        <div class="tease">Share of lift we credit ourselves · inherited by playbooks &amp; formulas</div>
+      </div>
+
+      <div class="master-detail no-inspector">
+        <div class="resource-list">
+          <table class="res-table">
+            <thead>
+              <tr>
+                <th>Reason</th>
+                <th style="text-align:right">Coefficient</th>
+                <th>Confidence</th>
+                <th>Used by</th>
+                <th>Scope</th>
+                <th>Last refresh</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>Inventory</strong></td><td class="v-num" style="text-align:right; color:var(--accent)">1.00</td><td><span class="v-num" style="color:var(--ink-3)">0.95</span></td><td>1 formula · 1 playbook</td><td><span class="scope">global</span></td><td class="v-num">May 18</td></tr>
+              <tr><td><strong>BuyBox</strong></td><td class="v-num" style="text-align:right; color:var(--accent)">0.85</td><td><span class="v-num" style="color:var(--ink-3)">0.90</span></td><td>1 formula · 1 playbook</td><td><span class="scope">global</span></td><td class="v-num">May 18</td></tr>
+              <tr><td><strong>Shipping</strong></td><td class="v-num" style="text-align:right; color:var(--accent)">0.85</td><td><span class="v-num" style="color:var(--ink-3)">0.90</span></td><td>1 formula</td><td><span class="scope">global</span></td><td class="v-num">May 14</td></tr>
+              <tr><td><strong>Promo</strong></td><td class="v-num" style="text-align:right; color:var(--accent)">0.80</td><td><span class="v-num" style="color:var(--ink-3)">0.85</span></td><td>2 formulas · 2 playbooks</td><td><span class="scope">global</span></td><td class="v-num">May 18</td></tr>
+              <tr><td><strong>Content</strong></td><td class="v-num" style="text-align:right; color:var(--accent)">0.65</td><td><span class="v-num" style="color:var(--ink-3)">0.70</span></td><td>1 formula · 1 playbook</td><td><span class="scope client">client:SharkNinja</span></td><td class="v-num">May 14</td></tr>
+              <tr><td><strong>Media</strong></td><td class="v-num" style="text-align:right; color:var(--accent)">0.60</td><td><span class="v-num" style="color:var(--ink-3)">0.85</span></td><td>3 formulas · 1 playbook</td><td><span class="scope">global</span></td><td class="v-num">May 18</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ REVIEWS RESOURCE ============ -->
+    <section id="reviews">
+      <div class="resource-heading">
+        <h3>Pending review</h3>
+        <span class="count">3 changes</span>
+        <div class="tease">System-proposed refinements · each runs 48h on 10% canary if approved</div>
+      </div>
+
+      <div class="master-detail no-inspector">
+        <div class="resource-list">
+          <table class="res-table">
+            <thead>
+              <tr>
+                <th>Proposal</th>
+                <th>Type</th>
+                <th>Source</th>
+                <th>Evidence</th>
+                <th>Risk</th>
+                <th style="width:160px"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="name-cell"><div class="nm">Bump Promo coefficient 0.78 → 0.83</div><div class="mt">+5 outcomes · avg +$32K lift consistent</div></td>
+                <td><span class="reason-tag">factor reweight</span></td>
+                <td>L6 daily</td>
+                <td><span class="v-num">n=5</span></td>
+                <td><span class="status-pill live">Low</span></td>
+                <td><div style="display:flex; gap:6px; justify-content:flex-end;"><button type="button" class="btn ghost sm">Reject</button><button type="button" class="btn accent sm">Approve</button></div></td>
+              </tr>
+              <tr>
+                <td class="name-cell"><div class="nm">Retire “Wait + monitor 48h” from Deal badge playbook</div><div class="mt">Conservative never picked in 12 outcomes</div></td>
+                <td><span class="reason-tag">playbook prune</span></td>
+                <td>L6 weekly</td>
+                <td><span class="v-num">0/12</span></td>
+                <td><span class="status-pill canary">Medium</span></td>
+                <td><div style="display:flex; gap:6px; justify-content:flex-end;"><button type="button" class="btn ghost sm">Reject</button><button type="button" class="btn accent sm">Approve</button></div></td>
+              </tr>
+              <tr>
+                <td class="name-cell"><div class="nm">Tighten Aggressive criteria · Deal badge playbook</div><div class="mt">Aggressive worked rate 33% · add competitor_undercut threshold</div></td>
+                <td><span class="reason-tag">criterion tune</span></td>
+                <td>L6 weekly</td>
+                <td><span class="v-num">3/12</span></td>
+                <td><span class="status-pill canary">Medium</span></td>
+                <td><div style="display:flex; gap:6px; justify-content:flex-end;"><button type="button" class="btn ghost sm">Reject</button><button type="button" class="btn accent sm">Approve</button></div></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </section>
 
   </main>
 </div>
 
+<script src="../assets/formulas.js"></script>
 <script src="../assets/app.js"></script>
+<script>
+  // ============================================================
+  // Formulas resource — data-driven render from window.BRAIN_FORMULAS
+  // ============================================================
+  (function () {
+    if (!window.BRAIN_FORMULAS) return;
+
+    var tbody = document.querySelector('[data-render="formulas-table"]');
+    var bodyEl = document.querySelector('[data-render="formula-inspector-body"]');
+    if (!tbody || !bodyEl) return;
+
+    var STATUS_LABEL = {
+      live: 'Live',
+      canary: 'Canary',
+      demoted: 'Context flag',
+      directional_only: 'Pending data'
+    };
+    var STATUS_CLASS = {
+      live: 'live',
+      canary: 'canary',
+      demoted: 'demoted',
+      directional_only: 'draft'
+    };
+    var METRIC_CLASS = {
+      CVR: 'cvr',
+      GV: 'gv',
+      OOS_binary: 'oos',
+      ASP: 'asp'
+    };
+    var METRIC_LABEL = {
+      OOS_binary: 'OOS-binary'
+    };
+
+    function esc(s) {
+      if (s == null) return '';
+      return String(s).replace(/[&<>"']/g, function (c) {
+        return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c];
+      });
+    }
+
+    function metricPill(metric, smaller) {
+      if (!metric) return '<span class="metric-pill na">n/a</span>';
+      var cls = METRIC_CLASS[metric] || 'cvr';
+      var label = METRIC_LABEL[metric] || metric;
+      var style = smaller ? ' style="font-size:11px;"' : '';
+      return '<span class="metric-pill ' + cls + '"' + style + '>' + esc(label) + '</span>';
+    }
+
+    function accuracyPill(f) {
+      var v = f.validation || {};
+      if (f.status === 'demoted') return '<span class="accuracy-pill muted">demoted</span>';
+      if (f.status === 'directional_only') return '<span class="accuracy-pill muted">directional only</span>';
+      if (v.accuracy_pct == null || (v.outcomes_count || 0) < 3) {
+        return '<span class="accuracy-pill muted">n=' + (v.outcomes_count || 0) + ' · building</span>';
+      }
+      var band = v.accuracy_band || '—';
+      var icon = v.accuracy_pct >= 0.70 ? '✅' : '⚠';
+      var cls = v.accuracy_pct >= 0.70 ? 'ok' : 'warn';
+      return '<span class="accuracy-pill ' + cls + '">' + esc(band) + ' ' + icon + '</span>';
+    }
+
+    function renderRow(f, isSelected) {
+      var demoted = f.status === 'demoted';
+      var directional = f.status === 'directional_only';
+      var rowAttrs = 'data-formula-id="' + esc(f.id) + '"';
+      var rowClass = isSelected ? ' class="selected"' : '';
+      var rowStyle = demoted ? ' style="opacity:.55"' : (directional ? ' style="opacity:.7"' : '');
+
+      var coefHtml = (f.reason && f.reason.coefficient != null)
+        ? '<span class="v-num" style="color:var(--accent)">' + f.reason.coefficient.toFixed(2) + '</span>'
+        : '<span class="v-num" style="color:var(--ink-3)">—</span>';
+
+      var outcomesVal;
+      var outcomesStyle;
+      if (demoted || directional) {
+        outcomesVal = '—';
+        outcomesStyle = ' style="text-align:right; color:var(--ink-3)"';
+      } else {
+        outcomesVal = (f.validation && f.validation.outcomes_count != null) ? f.validation.outcomes_count : 0;
+        outcomesStyle = ' style="text-align:right"';
+      }
+
+      var mt = f.id + (demoted ? ' · demoted' : '');
+
+      return '<tr ' + rowAttrs + rowClass + rowStyle + '>' +
+        '<td class="name-cell"><div class="nm">' + esc(f.alert_type) + '</div><div class="mt">' + esc(mt) + '</div></td>' +
+        '<td>' + metricPill(f.primary_metric) + '</td>' +
+        '<td>' + coefHtml + '</td>' +
+        '<td' + outcomesStyle + ' class="v-num">' + esc(outcomesVal) + '</td>' +
+        '<td>' + accuracyPill(f) + '</td>' +
+        '<td><span class="status-pill ' + STATUS_CLASS[f.status] + '">' + STATUS_LABEL[f.status] + '</span></td>' +
+      '</tr>';
+    }
+
+    function renderInspector(f) {
+      var demoted = f.status === 'demoted';
+      var directional = f.status === 'directional_only';
+      var v = f.validation || {};
+      var m = f.measurement || {};
+      var html = '';
+
+      // Header
+      html += '<header class="inspector-head">' +
+        '<span class="title">' + esc(f.alert_type) + '</span>' +
+        '<span class="id">' + esc(f.id) + '</span>' +
+        '<button type="button" class="x" aria-label="Close inspector">' +
+          '<svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>' +
+        '</button>' +
+      '</header>';
+
+      // Identity
+      var reasonLine = f.reason
+        ? esc(f.reason.category) + ' <span class="v acc" style="font-family:var(--mono); margin-left:6px;">coef ' + f.reason.coefficient.toFixed(2) + '</span>'
+        : '<span style="color:var(--ink-3)">—</span>';
+
+      html += '<div class="inspector-section">' +
+        '<div class="h">Identity</div>' +
+        '<div class="ins-kv">' +
+          '<div class="k">Primary metric</div><div class="v">' + (f.primary_metric ? metricPill(f.primary_metric, true) : '<span style="color:var(--ink-3)">n/a</span>') + '</div>' +
+          '<div class="k">Reason</div><div class="v">' + reasonLine + '</div>' +
+          '<div class="k">Scope</div><div class="v mono">' + esc(f.scope || 'global') + '</div>' +
+          '<div class="k">Status</div><div class="v"><span class="status-pill ' + STATUS_CLASS[f.status] + '">' + STATUS_LABEL[f.status] + '</span></div>' +
+          '<div class="k">Version</div><div class="v mono">' + esc(f.version || 'v1') + '</div>' +
+        '</div>' +
+      '</div>';
+
+      // Expression
+      var exprBody;
+      if (demoted) {
+        exprBody = '<div style="font-size:12px; color:var(--ink-2); line-height:1.5;">' +
+          '<strong>Demoted from $ attribution.</strong><br/>' +
+          esc((f.formula && f.formula.reason) || 'See notes.') +
+          '</div>';
+      } else if (directional) {
+        exprBody = '<div style="font-size:12px; color:var(--ink-2); line-height:1.5;">' +
+          '<strong>Directional only in v1.</strong> ' +
+          esc((f.formula && f.formula.v1_treatment) || '') +
+          '</div>';
+        if (f.formula && f.formula.intended_formula) {
+          exprBody += '<div class="formula-code" style="margin-top:8px;">' +
+            '<span class="cmt">// intended formula (post-data)</span>\n' +
+            esc(f.formula.intended_formula) +
+          '</div>';
+        }
+      } else {
+        var primary = (f.formula && f.formula.primary) || '';
+        var fallback = (f.formula && f.formula.fallback) || '';
+        exprBody = '<div class="formula-code">' +
+          '<span class="cmt">// primary expression</span>\n' + esc(primary) +
+          (fallback ? '\n\n<span class="cmt">// fallback</span>\n' + esc(fallback) : '') +
+        '</div>';
+      }
+      html += '<div class="inspector-section">' +
+        '<div class="h">Expression <a href="#" class="edit">edit →</a></div>' +
+        exprBody +
+      '</div>';
+
+      // Constants
+      var consts = f.constants || [];
+      var constsHtml;
+      if (consts.length === 0) {
+        constsHtml = '<div style="font-size:12px; color:var(--ink-3); line-height:1.5;">No empirical constants — uses observed values only.</div>';
+      } else {
+        constsHtml = '<div class="ins-kv">';
+        consts.forEach(function (c) {
+          var val;
+          if (c.value != null) {
+            val = typeof c.value === 'number' ? c.value : esc(c.value);
+          } else if (c.values) {
+            val = '{ ' + Object.keys(c.values).map(function (k) { return k + ': ' + c.values[k]; }).join(', ') + ' }';
+          } else {
+            val = '—';
+          }
+          constsHtml += '<div class="k mono">' + esc(c.name) + '</div>' +
+            '<div class="v mono">' + val + (c.unit ? ' <span style="color:var(--ink-3); font-weight:400;">' + esc(c.unit) + '</span>' : '') + '</div>';
+        });
+        constsHtml += '</div>';
+      }
+      html += '<div class="inspector-section">' +
+        '<div class="h">Constants <span style="font-family:var(--mono); font-weight:600; color:var(--ink-3); font-size:10px;">' + (consts.length || 'none') + '</span></div>' +
+        constsHtml +
+      '</div>';
+
+      // Measurement
+      if (m && m.method) {
+        html += '<div class="inspector-section">' +
+          '<div class="h">Measurement</div>' +
+          '<div class="ins-kv">' +
+            '<div class="k">Method</div><div class="v mono">' + esc(m.method) + '</div>' +
+            (m.window_days != null ? '<div class="k">Post window</div><div class="v mono">' + m.window_days + 'd</div>' : '') +
+            (m.pre_period_days != null ? '<div class="k">Pre window</div><div class="v mono">' + m.pre_period_days + 'd</div>' : '') +
+            (m.min_donor_count != null ? '<div class="k">Min donors</div><div class="v mono">' + m.min_donor_count + '</div>' : '') +
+          '</div>' +
+        '</div>';
+      }
+
+      // Accuracy history
+      if (!demoted && !directional && v.outcomes_count != null) {
+        var bias = v.bias != null ? (v.bias > 0 ? '+' : '') + (v.bias * 100).toFixed(1) + '%' : '—';
+        var mape = v.mean_abs_pct_error != null ? (v.mean_abs_pct_error * 100).toFixed(1) + '%' : '—';
+        var withinBand;
+        if (v.accuracy_pct != null && v.outcomes_count > 0) {
+          withinBand = Math.round(v.accuracy_pct * v.outcomes_count) + ' of ' + v.outcomes_count + ' within band';
+        } else {
+          withinBand = 'building';
+        }
+        html += '<div class="inspector-section">' +
+          '<div class="h">Accuracy history <a href="#" class="edit">view trend →</a></div>' +
+          '<div class="ins-kv">' +
+            '<div class="k">Rolling 30</div><div class="v acc">' + esc(v.accuracy_band || '—') + ' · ' + withinBand + '</div>' +
+            '<div class="k">Mean APE</div><div class="v mono">' + mape + '</div>' +
+            '<div class="k">Bias</div><div class="v mono">' + bias + '</div>' +
+            '<div class="k">Last refresh</div><div class="v mono">' + esc(v.last_refresh || '—') + '</div>' +
+          '</div>' +
+        '</div>';
+      }
+
+      // Notes (for demoted/directional or when validation has notes)
+      var noteText = f.notes || (v && v.notes);
+      if (noteText && (demoted || directional || (f.formula && f.formula.directional_only))) {
+        html += '<div class="inspector-section">' +
+          '<div class="h">Notes</div>' +
+          '<div style="font-size:12px; color:var(--ink-3); line-height:1.5;">' + esc(noteText) + '</div>' +
+        '</div>';
+      }
+
+      // Used in playbooks
+      var usedBy = f.used_by || [];
+      if (usedBy.length > 0) {
+        var pbHtml = '<div class="ins-outcomes">';
+        usedBy.forEach(function (pbId) {
+          pbHtml += '<div class="ins-outcome">' +
+            '<div><div class="o-name">' + esc(pbId) + '</div><div class="o-mt">playbook</div></div>' +
+            '<div></div>' +
+            '<div><a href="#playbooks" style="color:var(--accent); font-size:10px; font-weight:600; text-decoration:none;">view →</a></div>' +
+          '</div>';
+        });
+        pbHtml += '</div>';
+        html += '<div class="inspector-section">' +
+          '<div class="h">Used in playbooks <span style="font-family:var(--mono); font-weight:600; color:var(--ink-3); font-size:10px;">' + usedBy.length + '</span></div>' +
+          pbHtml +
+        '</div>';
+      }
+
+      bodyEl.innerHTML = html;
+    }
+
+    var selectedId = 'f_lost_buy_box';
+
+    function renderTable() {
+      tbody.innerHTML = window.BRAIN_FORMULAS.map(function (f) {
+        return renderRow(f, f.id === selectedId);
+      }).join('');
+    }
+
+    function select(id) {
+      var f = (window.BRAIN_FORMULAS_BY_ID && window.BRAIN_FORMULAS_BY_ID[id]) || window.BRAIN_FORMULAS[0];
+      selectedId = f.id;
+      Array.prototype.forEach.call(tbody.querySelectorAll('tr'), function (tr) {
+        if (tr.getAttribute('data-formula-id') === selectedId) {
+          tr.classList.add('selected');
+        } else {
+          tr.classList.remove('selected');
+        }
+      });
+      renderInspector(f);
+    }
+
+    tbody.addEventListener('click', function (e) {
+      var tr = e.target.closest && e.target.closest('tr[data-formula-id]');
+      if (!tr) return;
+      select(tr.getAttribute('data-formula-id'));
+    });
+
+    renderTable();
+    select(selectedId);
+  })();
+</script>
 </body>
 </html>

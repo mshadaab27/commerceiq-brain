@@ -3,11 +3,330 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CommerceIQ · Your actions</title>
+<title>CommerceIQ · Your impact</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="./assets/styles.css">
+<style>
+  /* ===== Outcome tracker v4 — IMPACT-FIRST =====
+     The card answers, in this order:
+     1. How much money came back? (the hero number)
+     2. Where did it come from? (Shapley bars + sub-metrics)
+     3. Is the brand healthier? (directional pills)
+     No method jargon. No attribution math. That lives in admin.
+     ===================================================== */
+
+  .impact-pair {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+    border: 1px solid var(--line); border-radius: var(--r-lg);
+    overflow: hidden; background: var(--bg);
+    margin-top: var(--s-3);
+  }
+  .impact-pair > div { padding: 20px 24px; }
+  .impact-pair > div + div { border-left: 1px solid var(--line); }
+  .impact-pair .kicker {
+    font-size: 10px; text-transform: uppercase; letter-spacing: .14em;
+    color: var(--ink-3); font-weight: 700; margin-bottom: 8px;
+  }
+  .impact-pair .num {
+    font-size: 28px; font-weight: 800; letter-spacing: -.025em;
+    color: var(--ink); font-variant-numeric: tabular-nums;
+  }
+  .impact-pair .num .symbol { color: var(--pos); }
+  .impact-pair .qual { font-size: 17px; font-weight: 700; color: var(--ink); line-height: 1.35; }
+  .impact-pair .qual .strong-pos { color: var(--pos); }
+  .impact-pair .micro { font-size: 12px; color: var(--ink-3); margin-top: 8px; }
+
+  /* Section heading */
+  .ot-section-head {
+    display: flex; align-items: baseline; gap: 12px;
+    margin: 28px 0 14px;
+  }
+  .ot-section-head h2 {
+    font-size: 12px; text-transform: uppercase; letter-spacing: .14em;
+    color: var(--ink); font-weight: 700;
+  }
+  .ot-section-head .count { font-family: var(--mono); font-size: 11px; color: var(--ink-3); }
+  .ot-section-head .line { flex: 1; height: 1px; background: var(--line); }
+  .ot-section-head .right { display: flex; gap: 4px; }
+
+  /* ===== FEATURED OUTCOME ===== */
+  .ot-featured {
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: var(--r-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+  }
+  .ot-featured .top-strip {
+    padding: 9px 22px;
+    background: linear-gradient(90deg, rgba(194,49,255,.05), rgba(90,175,254,.02));
+    border-bottom: 1px solid var(--line);
+    display: flex; align-items: center; gap: 10px;
+    font-size: 11px;
+  }
+  .ot-featured .top-strip .live-dot {
+    width: 7px; height: 7px; border-radius: 50%; background: var(--pos);
+    box-shadow: 0 0 6px var(--pos); animation: liveP 2s infinite;
+  }
+  @keyframes liveP { 0%,100%{opacity:.6} 50%{opacity:1} }
+  .ot-featured .top-strip .lbl {
+    text-transform: uppercase; letter-spacing: .14em;
+    font-weight: 700; color: var(--accent);
+  }
+  .ot-featured .top-strip .day {
+    color: var(--ink-3); margin-left: auto; font-size: 12px;
+  }
+  .ot-featured .head { padding: 22px 26px 0; }
+  .ot-featured .head h2 {
+    font-size: 19px; font-weight: 700; letter-spacing: -.015em;
+    color: var(--ink);
+  }
+  .ot-featured .head .sub {
+    font-size: 13px; color: var(--ink-3); margin-top: 4px;
+    display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  }
+  .ot-featured .head .sub .asin { font-family: var(--mono); }
+  .ot-featured .head .sub .from-alert {
+    color: var(--accent); font-weight: 600; text-decoration: none;
+  }
+  .ot-featured .head .sub .from-alert:hover { text-decoration: underline; }
+
+  /* ===== PREDICTED VS REALIZED HEADER BAND ===== */
+  .accuracy-band {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr auto;
+    gap: 18px; align-items: center;
+    padding: 12px 26px;
+    background: var(--bg-soft);
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+  .accuracy-band .ab-block .lbl {
+    font-size: 9px; text-transform: uppercase; letter-spacing: .12em;
+    color: var(--ink-3); font-weight: 700;
+  }
+  .accuracy-band .ab-block .val {
+    font-size: 18px; font-weight: 700;
+    color: var(--ink); font-variant-numeric: tabular-nums;
+    margin-top: 2px; line-height: 1;
+  }
+  .accuracy-band .ab-block .val.pos { color: var(--pos); }
+  .accuracy-band .ab-block .sub {
+    font-size: 10px; color: var(--ink-3); margin-top: 3px;
+  }
+  .accuracy-band .ab-arrow {
+    color: var(--ink-4); font-size: 20px; line-height: 1;
+  }
+  .accuracy-band .ab-verdict {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 5px 11px; border-radius: var(--r-pill);
+    background: var(--pos-tint); color: var(--pos);
+    font-size: 11px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: .04em;
+  }
+  .accuracy-band .ab-verdict.warn { background: var(--warn-tint); color: var(--warn); }
+  .accuracy-band .ab-verdict.miss { background: var(--neg-tint); color: var(--neg); }
+  .accuracy-band .ab-verdict .pct {
+    font-family: var(--mono); font-weight: 700;
+  }
+
+  /* ===== IMPACT HERO (the big number) ===== */
+  .impact-hero {
+    padding: 22px 26px 18px;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 20px;
+    align-items: center;
+  }
+  .impact-hero .num-block { }
+  .impact-hero .num {
+    font-size: 40px; font-weight: 800; color: var(--pos);
+    letter-spacing: -.03em; font-variant-numeric: tabular-nums;
+    line-height: 1;
+  }
+  .impact-hero .cap {
+    font-size: 12px; color: var(--ink-2); margin-top: 5px;
+    font-variant-numeric: tabular-nums;
+  }
+  .impact-hero .cap .arrow { color: var(--ink-4); }
+  .impact-hero .cap b { color: var(--ink); font-weight: 700; }
+  .impact-hero .driver-block {
+    padding-left: 20px;
+    border-left: 1px dashed var(--line-2);
+  }
+  .impact-hero .driver-text {
+    font-size: 15px; font-weight: 600; color: var(--ink);
+    line-height: 1.4;
+  }
+  .impact-hero .driver-text .acc { color: var(--accent); font-weight: 700; }
+
+  /* ===== SHAPLEY BARS (tighter) ===== */
+  .lift-section { padding: 8px 26px 18px; }
+
+  .shap-list { display: flex; flex-direction: column; gap: 8px; }
+  .shap-row {
+    display: grid;
+    grid-template-columns: 86px 1fr 80px;
+    gap: 12px;
+    align-items: center;
+  }
+  .shap-row .metric-name {
+    font-size: 13px; font-weight: 700; color: var(--ink);
+  }
+  .shap-row.key .metric-name {
+    color: var(--accent);
+  }
+  .shap-bar-wrap {
+    height: 22px; background: var(--bg-soft);
+    border-radius: 5px;
+    overflow: hidden; position: relative;
+    border: 1px solid var(--line);
+  }
+  .shap-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent-tint), rgba(194,49,255,.4));
+    transition: width .6s cubic-bezier(.4, 0, .2, 1);
+  }
+  .shap-row.key .shap-bar {
+    background: linear-gradient(90deg, rgba(194,49,255,.5), var(--accent));
+  }
+  .shap-bar-wrap .label-inside {
+    position: absolute; top: 0; bottom: 0; left: 0; right: 0;
+    display: flex; align-items: center; padding: 0 10px;
+    font-size: 11px; color: var(--ink); font-weight: 600;
+  }
+  .shap-row.key .shap-bar-wrap .label-inside { color: white; }
+  .shap-row .shap-amt {
+    font-size: 15px; font-weight: 700; color: var(--pos);
+    text-align: right; font-variant-numeric: tabular-nums;
+  }
+  .shap-row.neg .shap-amt { color: var(--neg); }
+  .shap-subs {
+    grid-column: 2 / -1;
+    display: flex; gap: 5px; flex-wrap: wrap;
+    margin-top: 2px; margin-bottom: 4px;
+  }
+  .shap-sub {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-size: 10px; color: var(--ink-2);
+    padding: 2px 8px; border-radius: var(--r-pill);
+    background: var(--bg-soft);
+  }
+  .shap-sub .arr { font-weight: 700; }
+  .shap-sub.up .arr { color: var(--pos); }
+  .shap-sub.down .arr { color: var(--neg); }
+  .shap-sub.flat .arr { color: var(--ink-3); }
+  .shap-sub.pending {
+    background: transparent; color: var(--ink-3);
+    border: 1px dashed var(--line-2);
+  }
+
+  /* Long-term row (slim) */
+  .lt-row {
+    padding: 12px 26px 14px;
+    background: var(--bg-soft);
+    border-top: 1px solid var(--line);
+    display: flex; align-items: center; gap: 12px;
+  }
+  .lt-row .lt-lead {
+    font-size: 10px; text-transform: uppercase; letter-spacing: .12em;
+    color: var(--ink-3); font-weight: 700;
+  }
+  .lt-pills { display: flex; gap: 6px; flex-wrap: wrap; }
+  .lt-pill {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-size: 11px; padding: 4px 10px;
+    border-radius: var(--r-pill); font-weight: 700;
+    text-transform: uppercase; letter-spacing: .04em;
+  }
+  .lt-pill.up { background: var(--pos-tint); color: var(--pos); }
+  .lt-pill.flat { background: var(--bg); color: var(--ink-3); border: 1px solid var(--line); }
+  .lt-pill.down { background: var(--neg-tint); color: var(--neg); }
+
+  /* ===== COMPACT OUTCOME ROW — IMPACT-FIRST ===== */
+  .ot-compact {
+    background: var(--bg); border: 1px solid var(--line);
+    border-radius: var(--r-md); padding: 14px 18px;
+    margin-bottom: 8px;
+    display: grid;
+    grid-template-columns: 1.5fr 120px 180px 1fr;
+    gap: 20px; align-items: center;
+    transition: box-shadow .15s ease, transform .15s ease;
+  }
+  .ot-compact:hover { box-shadow: var(--shadow-sm); transform: translateY(-1px); }
+  .ot-compact .who { min-width: 0; }
+  .ot-compact .who .name {
+    font-weight: 600; font-size: 14px; color: var(--ink);
+    line-height: 1.3;
+  }
+  .ot-compact .who .meta {
+    font-size: 12px; color: var(--ink-3); margin-top: 4px;
+    display: flex; gap: 6px; flex-wrap: wrap; align-items: center;
+    line-height: 1.4;
+  }
+  .ot-compact .who .meta .asin { font-family: var(--mono); }
+  .ot-compact .who .meta .from-alert { color: var(--accent); font-weight: 600; }
+
+  .ot-compact .status-block { display: flex; flex-direction: column; gap: 5px; }
+  .ot-compact .status-pill {
+    display: inline-flex;
+    font-size: 10px; padding: 3px 8px; border-radius: var(--r-pill);
+    font-weight: 700; text-transform: uppercase; letter-spacing: .04em;
+    align-self: flex-start;
+    line-height: 1.4;
+  }
+  .ot-compact .status-pill.live { background: var(--accent-tint); color: var(--accent); }
+  .ot-compact .status-pill.measured { background: var(--pos-tint); color: var(--pos); }
+  .ot-compact .status-pill.measuring { background: var(--warn-tint); color: var(--warn); }
+  .ot-compact .status-pill.failed { background: var(--neg-tint); color: var(--neg); }
+  .ot-compact .day-text { font-size: 11px; color: var(--ink-3); font-family: var(--mono); line-height: 1.4; }
+
+  /* Impact cell: clean stacked structure, no text overlap */
+  .ot-compact .impact-cell {
+    display: flex; flex-direction: column; gap: 8px;
+    align-items: flex-start;
+    min-width: 0;
+  }
+  .ot-compact .impact-cell .v {
+    font-size: 22px; font-weight: 800;
+    font-variant-numeric: tabular-nums;
+    color: var(--ink); letter-spacing: -.015em;
+    line-height: 1;
+  }
+  .ot-compact .impact-cell .v.pos { color: var(--pos); }
+  .ot-compact .impact-cell .v.neg { color: var(--neg); }
+  .ot-compact .impact-cell .v.muted {
+    color: var(--ink-3); font-size: 13px; font-weight: 500;
+    font-style: italic; line-height: 1.4;
+  }
+  /* Driver becomes its own pill — no inline text to overlap */
+  .ot-compact .driver-pill {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-size: 10px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: .05em;
+    padding: 3px 9px; border-radius: var(--r-pill);
+    background: var(--accent-tint); color: var(--accent);
+    line-height: 1.4;
+  }
+  .ot-compact .driver-pill .pct {
+    font-family: var(--mono); font-weight: 700;
+    color: var(--ink-2); letter-spacing: 0;
+  }
+  .ot-compact .driver-pill.empty {
+    background: var(--bg-soft); color: var(--ink-3);
+  }
+
+  /* Long-term cell */
+  .ot-compact .lt-cell { display: flex; gap: 4px; flex-wrap: wrap; }
+
+  @media (max-width: 900px) {
+    .impact-pair, .impact-hero, .ot-compact { grid-template-columns: 1fr !important; }
+    .impact-pair > div + div { border-left: 0; border-top: 1px solid var(--line); }
+    .impact-hero .driver-block { padding-left: 0; border-left: 0; border-top: 1px dashed var(--line-2); padding-top: 16px; }
+  }
+</style>
 </head>
 <body class="surface-customer">
 
@@ -24,126 +343,314 @@
       <input type="text" placeholder="Search SKUs, brands, alerts…">
       <span class="kbd">⌘K</span>
     </label>
-    <button class="iconbtn"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg></button>
+    <button type="button" class="iconbtn" aria-label="Notifications"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg></button>
+    <a href="./admin/index.html" class="iconbtn brain-link" title="Brain admin" aria-label="Brain admin portal">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/><path d="M20 3v4"/><path d="M22 5h-4"/><path d="M4 17v2"/><path d="M5 18H3"/></svg>
+    </a>
     <div class="avatar">SC</div>
   </div>
 </header>
 
 <main class="page">
+
+  <!-- HERO -->
   <section class="hero">
     <div class="meta-row">
       <span class="pulse-dot"></span>
-      <span class="greet">Your actions</span>
+      <span class="greet">Your impact</span>
       <span style="color:var(--ink-4)">·</span>
-      <span>Tracking impact against a synthetic baseline</span>
+      <span>What your fixes recovered this month</span>
     </div>
-    <h1>14 actions tracked. <span class="em">$1.8M</span> in cumulative recovered revenue.</h1>
-    <p class="sub">Every recommendation you accept is measured for 7–14 days against comparable SKUs. Below: what's in flight, what worked, and what changed our beliefs.</p>
+    <h1>+$1.8M recovered across 11 actions you took.</h1>
+    <p class="sub">Brand value is trending up on 3 of 5 priority categories. Every result shows where the lift came from.</p>
   </section>
 
-  <section class="section">
-    <div class="actions-stats">
-      <div class="stat"><div class="l">In flight</div><div class="v acc">3<span class="unit">actions</span></div></div>
-      <div class="stat"><div class="l">Measured this month</div><div class="v">11</div></div>
-      <div class="stat"><div class="l">Worked (≥5% lift)</div><div class="v pos">8 <span class="unit">/ 11</span></div></div>
-      <div class="stat"><div class="l">Recovered revenue</div><div class="v pos">+$1.8M</div></div>
+  <!-- Slim impact pair -->
+  <section class="impact-pair fade-up">
+    <div>
+      <div class="kicker">Short-term · dollars recovered</div>
+      <div class="num"><span class="symbol">+</span>$1.82M</div>
+      <div class="micro">Across <strong>11 measured outcomes</strong> this month · 3 still measuring · 1 did not work.</div>
+    </div>
+    <div>
+      <div class="kicker">Long-term · brand value</div>
+      <div class="qual">Trending up across <span class="strong-pos">3 of 5</span> priority categories</div>
+      <div class="micro">Direction only — numbers in a future update.</div>
+    </div>
+  </section>
+
+  <!-- Filter strip + outcomes -->
+  <div class="ot-section-head">
+    <h2>Outcomes</h2>
+    <span class="count">15 total</span>
+    <div class="line"></div>
+    <div class="right" data-chip-group>
+      <button type="button" class="chip active">All</button>
+      <button type="button" class="chip">Live <span style="opacity:.6;margin-left:3px">3</span></button>
+      <button type="button" class="chip">Measured <span style="opacity:.6;margin-left:3px">11</span></button>
+      <button type="button" class="chip">Did not work <span style="opacity:.6;margin-left:3px">1</span></button>
+    </div>
+  </div>
+
+  <!-- ============ FEATURED OUTCOME (IMPACT FIRST) ============ -->
+  <article class="ot-featured fade-up">
+    <div class="top-strip">
+      <span class="live-dot"></span>
+      <span class="lbl">Live measurement</span>
+      <span class="day">Day 4 of 7 · refines daily · final read May 24</span>
     </div>
 
-    <div class="section-head" style="margin-bottom:18px;">
-      <h2>In flight</h2>
-      <span class="count">3</span>
-      <div class="right" data-chip-group>
-        <button class="chip active">All status</button>
-        <button class="chip">All brands</button>
-        <button class="chip">Last 30 days</button>
+    <div class="head">
+      <h2>Fix promo deal badge · Ninja CREAMi Scoop &amp; Swirl</h2>
+      <div class="sub">
+        <span class="asin">B0DSJW8SFG</span>
+        <span style="color:var(--ink-4)">·</span>
+        <span>from alert <a href="./alert.html?id=B0DSJW8SFG" class="from-alert">“Deal badge missing 7/7 days”</a></span>
       </div>
     </div>
 
-    <article class="action-card">
-      <div class="lh">
-        <div class="name">Fix promo deal badge</div>
-        <div class="meta">Ninja CREAMi Scoop &amp; Swirl<span class="asin">B0DSJW8SFG</span></div>
-        <span class="pill pill-pos">On track</span>
-        <p>The same fix pattern lifted comparable SKUs by 8–15% in 7 days. We're 4 days in. Current lift on OPS exceeds the lower bound and is trending toward the upper bound.</p>
+    <!-- PREDICTED VS REALIZED ACCURACY BAND (NEW) -->
+    <div class="accuracy-band">
+      <div class="ab-block">
+        <div class="lbl">Predicted on day 0</div>
+        <div class="val">$54K</div>
+        <div class="sub">from Lost Buy Box formula</div>
       </div>
-      <div class="chart">
-        <svg width="160" height="60" viewBox="0 0 160 60" fill="none">
-          <path d="M4 50 L22 47 L40 44 L58 38 L76 32 L94 26 L112 18 L130 12 L156 6" stroke="var(--pos)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          <circle cx="156" cy="6" r="3" fill="var(--pos)"/>
-          <path d="M4 50 L22 49 L40 48 L58 46 L76 44 L94 41 L112 38 L130 34 L156 30" stroke="var(--ink-4)" stroke-width="1.5" stroke-dasharray="3 3"/>
-        </svg>
-        <div class="legend">
-          Actual lift
-          <span class="v pos">+9.2%</span>
+      <div class="ab-arrow">→</div>
+      <div class="ab-block">
+        <div class="lbl">Realized on day 4 (projected day 7)</div>
+        <div class="val pos">+$58K</div>
+        <div class="sub">Shapley CVR-led</div>
+      </div>
+      <div class="ab-verdict">
+        <span class="pct">+8%</span>
+        <span>· within band ✓</span>
+      </div>
+    </div>
+
+    <!-- IMPACT HERO -->
+    <div class="impact-hero">
+      <div class="num-block">
+        <div class="num">+$58K</div>
+        <div class="cap">OPS <b>$307K</b> <span class="arrow">→</span> <b>$365K</b> projected</div>
+      </div>
+      <div class="driver-block">
+        <div class="driver-lead">Why</div>
+        <div class="driver-text">
+          <span class="acc">Conversion is driving 82%</span> — promo badge is back and buy box was restored.
         </div>
       </div>
-      <div class="progress-wrap">
-        <div class="lbl"><span>Day 4 / 7</span><span>57%</span></div>
-        <div class="bar" style="height:6px; background:var(--line); border-radius:3px; overflow:hidden;"><i style="display:block; height:100%; width:57%; background:linear-gradient(90deg,var(--accent),var(--sky))"></i></div>
-      </div>
-    </article>
-
-    <article class="action-card">
-      <div class="lh">
-        <div class="name">Reactivate Matching event price</div>
-        <div class="meta">Ninja CREAMi NC301<span class="asin">B08QXB9BH5</span></div>
-        <span class="pill pill-warn">Measuring</span>
-        <p>Synthetic baseline built from 12 donor SKUs. We'll have a meaningful read by day 4. Early signal: glance views are returning.</p>
-      </div>
-      <div class="chart">
-        <svg width="160" height="60" viewBox="0 0 160 60" fill="none">
-          <path d="M4 38 L22 36" stroke="var(--ink-3)" stroke-width="2" stroke-linecap="round"/>
-          <circle cx="22" cy="36" r="3" fill="var(--accent)"/>
-          <path d="M22 36 L156 30" stroke="var(--ink-4)" stroke-width="1.5" stroke-dasharray="3 3"/>
-        </svg>
-        <div class="legend">Actual lift<span class="v">— measuring</span></div>
-      </div>
-      <div class="progress-wrap">
-        <div class="lbl"><span>Day 1 / 7</span><span>14%</span></div>
-        <div class="bar" style="height:6px; background:var(--line); border-radius:3px; overflow:hidden;"><i style="display:block; height:100%; width:14%; background:linear-gradient(90deg,var(--accent),var(--sky))"></i></div>
-      </div>
-    </article>
-
-    <article class="action-card">
-      <div class="lh">
-        <div class="name">Boost ad spend on P0 keywords</div>
-        <div class="meta">Ninja FlexFlame ProConnect<span class="asin">B0GHPM2C3Y</span></div>
-        <span class="pill pill-info">Measured · 14d</span>
-        <p>Closed loop. Synthetic control showed +11.3% OPS vs comparable SKUs. <strong style="color:var(--accent)">Brain belief updated:</strong> media→OPS link strengthened by +0.07 (n=14 obs).</p>
-      </div>
-      <div class="chart">
-        <svg width="160" height="60" viewBox="0 0 160 60" fill="none">
-          <path d="M4 50 L18 47 L32 49 L48 44 L64 40 L80 36 L96 32 L116 24 L138 16 L156 8" stroke="var(--pos)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          <circle cx="156" cy="8" r="3" fill="var(--pos)"/>
-        </svg>
-        <div class="legend">Actual lift<span class="v pos">+11.3%</span></div>
-      </div>
-      <div class="progress-wrap">
-        <div class="lbl"><span>Day 14 / 14</span><span>Closed</span></div>
-        <div class="bar" style="height:6px; background:var(--line); border-radius:3px; overflow:hidden;"><i style="display:block; height:100%; width:100%; background:linear-gradient(90deg,var(--pos),var(--sky))"></i></div>
-      </div>
-    </article>
-  </section>
-
-  <section class="section">
-    <div class="section-head">
-      <h2>Recently measured</h2>
-      <span class="count">11 this month</span>
-      <div class="right"><button class="chip">Export</button></div>
     </div>
-    <div class="table-wrap" style="margin-top:14px;">
-      <table class="table">
-        <thead><tr><th>Action</th><th>SKU</th><th>Predicted</th><th>Measured</th><th>Method</th><th>Result</th></tr></thead>
-        <tbody>
-          <tr><td>Fix deal badge</td><td class="mono">B0DSJW8SFG</td><td>+8–15%</td><td class="pos tabular">+11.4%</td><td>Synthetic control</td><td><span class="pill pill-pos">Worked</span></td></tr>
-          <tr><td>Increase ad spend, P0 kws</td><td class="mono">B0GHPM2C3Y</td><td>+6%</td><td class="pos tabular">+11.3%</td><td>Synthetic control</td><td><span class="pill pill-pos">Worked</span></td></tr>
-          <tr><td>Restore promo on parent ASIN</td><td class="mono">B07YT83K4Z</td><td>+10%</td><td class="pos tabular">+14.8%</td><td>Pre/post trend</td><td><span class="pill pill-pos">Worked</span></td></tr>
-          <tr><td>Match competitor price</td><td class="mono">B09HQR2X4N</td><td>+5%</td><td class="neg tabular">−2.1%</td><td>Synthetic control</td><td><span class="pill" style="background:var(--neg-tint); color:var(--neg);">Did not work</span></td></tr>
-          <tr><td>Add A+ content</td><td class="mono">B0CRSPK22</td><td>+4%</td><td class="pos tabular">+3.9%</td><td>Pre/post simple</td><td><span class="pill pill-pos">Worked</span></td></tr>
-        </tbody>
-      </table>
+
+    <!-- SHAPLEY BARS -->
+    <div class="lift-section">
+      <div class="head-line">Where the lift came from</div>
+      <div class="shap-list">
+        <div>
+          <div class="shap-row key">
+            <div class="metric-name">Conversion</div>
+            <div class="shap-bar-wrap"><div class="shap-bar" style="width:82%"></div><div class="label-inside">82%</div></div>
+            <div class="shap-amt">+$48K</div>
+          </div>
+          <div class="shap-subs">
+            <span class="shap-sub up"><span class="arr">↑</span> Promo Rate restored</span>
+            <span class="shap-sub up"><span class="arr">↑</span> Buy Box won back</span>
+            <span class="shap-sub flat"><span class="arr">—</span> Availability 99%</span>
+            <span class="shap-sub flat"><span class="arr">—</span> Avg Rating 4.6</span>
+          </div>
+        </div>
+
+        <div>
+          <div class="shap-row">
+            <div class="metric-name">Glance Views</div>
+            <div class="shap-bar-wrap"><div class="shap-bar" style="width:12%"></div><div class="label-inside">12%</div></div>
+            <div class="shap-amt">+$7K</div>
+          </div>
+          <div class="shap-subs">
+            <span class="shap-sub up"><span class="arr">↑</span> Paid traffic +18%</span>
+            <span class="shap-sub up"><span class="arr">↑</span> Organic traffic +1.8%</span>
+            <span class="shap-sub pending">Share-of-voice · data pending</span>
+          </div>
+        </div>
+
+        <div>
+          <div class="shap-row">
+            <div class="metric-name">ASP</div>
+            <div class="shap-bar-wrap"><div class="shap-bar" style="width:6%"></div><div class="label-inside">6%</div></div>
+            <div class="shap-amt">+$3K</div>
+          </div>
+          <div class="shap-subs">
+            <span class="shap-sub flat"><span class="arr">—</span> Avg price within band</span>
+          </div>
+        </div>
+      </div>
     </div>
-  </section>
+
+    <!-- LONG-TERM -->
+    <div class="lt-row">
+      <div class="lt-lead">Brand value</div>
+      <div class="lt-pills">
+        <span class="lt-pill up">↑ Visibility</span>
+        <span class="lt-pill up">↑ Deal-page presence</span>
+        <span class="lt-pill flat">— Share of voice</span>
+      </div>
+    </div>
+  </article>
+
+  <!-- ============ OTHER LIVE OUTCOMES ============ -->
+  <div class="ot-section-head">
+    <h2>Other live measurements</h2>
+    <span class="count">2 in flight</span>
+    <div class="line"></div>
+  </div>
+
+  <article class="ot-compact fade-up">
+    <div class="who">
+      <div class="name">Reactivate Matching event price</div>
+      <div class="meta">
+        <span class="asin">B08QXB9BH5</span>
+        <span style="color:var(--ink-4)">·</span>
+        <span>Ninja CREAMi NC301</span>
+        <span style="color:var(--ink-4)">·</span>
+        <span class="from-alert">from “Promo dropoff + LBB”</span>
+      </div>
+    </div>
+    <div class="status-block">
+      <span class="status-pill measuring">Measuring</span>
+      <span class="day-text">Day 1 of 7</span>
+    </div>
+    <div class="impact-cell">
+      <div class="v muted">first read day 4</div>
+      <div class="driver-pill empty">Too early</div>
+    </div>
+    <div class="lt-cell">
+      <span class="lt-pill flat">— Too early</span>
+    </div>
+  </article>
+
+  <article class="ot-compact fade-up">
+    <div class="who">
+      <div class="name">Boost ad spend on P0 keywords</div>
+      <div class="meta">
+        <span class="asin">B0GHPM2C3Y</span>
+        <span style="color:var(--ink-4)">·</span>
+        <span>Ninja FlexFlame ProConnect</span>
+        <span style="color:var(--ink-4)">·</span>
+        <span class="from-alert">from “KW rank slip + flat spend”</span>
+      </div>
+    </div>
+    <div class="status-block">
+      <span class="status-pill live">On track</span>
+      <span class="day-text">Day 11 of 14</span>
+    </div>
+    <div class="impact-cell">
+      <div class="v pos">+$45K</div>
+      <div class="driver-pill">Traffic <span class="pct">71%</span></div>
+    </div>
+    <div class="lt-cell">
+      <span class="lt-pill up">↑ Visibility</span>
+      <span class="lt-pill up">↑ Paid rank</span>
+    </div>
+  </article>
+
+  <!-- ============ MEASURED & CLOSED ============ -->
+  <div class="ot-section-head">
+    <h2>Recently measured</h2>
+    <span class="count">5 of 11 this month</span>
+    <div class="line"></div>
+  </div>
+
+  <article class="ot-compact fade-up">
+    <div class="who">
+      <div class="name">Restore parent ASIN promo</div>
+      <div class="meta"><span class="asin">B07YT83K4Z</span><span style="color:var(--ink-4)">·</span><span>Ninja Foodi</span><span style="color:var(--ink-4)">·</span><span class="from-alert">from “Promo dropoff”</span></div>
+    </div>
+    <div class="status-block">
+      <span class="status-pill measured">Worked</span>
+      <span class="day-text">Closed</span>
+    </div>
+    <div class="impact-cell">
+      <div class="v pos">+$119K</div>
+      <div class="driver-pill">Conversion <span class="pct">76%</span></div>
+    </div>
+    <div class="lt-cell">
+      <span class="lt-pill up">↑ Visibility</span>
+    </div>
+  </article>
+
+  <article class="ot-compact fade-up">
+    <div class="who">
+      <div class="name">Boost ad spend on P0 keywords</div>
+      <div class="meta"><span class="asin">B0GHPM2A1A</span><span style="color:var(--ink-4)">·</span><span>Shark FlexStyle</span><span style="color:var(--ink-4)">·</span><span class="from-alert">from “Media spend flat”</span></div>
+    </div>
+    <div class="status-block">
+      <span class="status-pill measured">Worked</span>
+      <span class="day-text">Closed</span>
+    </div>
+    <div class="impact-cell">
+      <div class="v pos">+$113K</div>
+      <div class="driver-pill">Traffic <span class="pct">68%</span></div>
+    </div>
+    <div class="lt-cell">
+      <span class="lt-pill up">↑ Visibility</span>
+      <span class="lt-pill up">↑ SOV</span>
+    </div>
+  </article>
+
+  <article class="ot-compact fade-up">
+    <div class="who">
+      <div class="name">Replenish inventory · expedited PO</div>
+      <div class="meta"><span class="asin">B0HQ8KJ4</span><span style="color:var(--ink-4)">·</span><span>Tide Pods</span><span style="color:var(--ink-4)">·</span><span class="from-alert">from “WoC &lt; 1 week”</span></div>
+    </div>
+    <div class="status-block">
+      <span class="status-pill measured">Worked</span>
+      <span class="day-text">Closed</span>
+    </div>
+    <div class="impact-cell">
+      <div class="v pos">+$78K</div>
+      <div class="driver-pill">Conversion <span class="pct">92%</span></div>
+    </div>
+    <div class="lt-cell">
+      <span class="lt-pill flat">— Restored to baseline</span>
+    </div>
+  </article>
+
+  <article class="ot-compact fade-up">
+    <div class="who">
+      <div class="name">Add A+ content</div>
+      <div class="meta"><span class="asin">B0CRSPK22</span><span style="color:var(--ink-4)">·</span><span>Shark Carpet</span><span style="color:var(--ink-4)">·</span><span class="from-alert">from “Content score &lt; 50”</span></div>
+    </div>
+    <div class="status-block">
+      <span class="status-pill measured">Worked</span>
+      <span class="day-text">Closed</span>
+    </div>
+    <div class="impact-cell">
+      <div class="v pos">+$29K</div>
+      <div class="driver-pill">Conversion <span class="pct">81%</span></div>
+    </div>
+    <div class="lt-cell">
+      <span class="lt-pill up">↑ Conversion</span>
+      <span class="lt-pill up">↑ Glance views</span>
+    </div>
+  </article>
+
+  <article class="ot-compact fade-up">
+    <div class="who">
+      <div class="name">Match competitor price</div>
+      <div class="meta"><span class="asin">B09HQR2X4N</span><span style="color:var(--ink-4)">·</span><span>Ninja blender</span><span style="color:var(--ink-4)">·</span><span class="from-alert">from “Lost buy box · price”</span></div>
+    </div>
+    <div class="status-block">
+      <span class="status-pill failed">Did not work</span>
+      <span class="day-text">Closed</span>
+    </div>
+    <div class="impact-cell">
+      <div class="v neg">−$2K</div>
+      <div class="driver-pill" style="background:var(--neg-tint); color:var(--neg);">ASP loss <span class="pct" style="color:var(--neg);">68%</span></div>
+    </div>
+    <div class="lt-cell">
+      <span class="lt-pill flat">— Still flipping</span>
+    </div>
+  </article>
 
 </main>
 
