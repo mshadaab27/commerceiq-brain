@@ -289,9 +289,42 @@ Three modes, pick by data availability:
 
 Each outcome row records which mode was used so quality is auditable.
 
+#### Impact-formula framework
+
+The outcome loop is only as useful as the *predicted* number the customer sees up-front. After auditing the 11 SharkNinja alerts live in [agent v2](https://sharkninja.commerceiq.ai/us/amazon/retail/agents/v2/alerts), we landed on a structured registry rather than per-alert hardcoded math.
+
+**Single source of truth:** [`/assets/formulas.js`](https://github.com/mshadaab27/commerceiq-brain/blob/main/assets/formulas.js) defines every alert's impact formula. The admin Impact Formulas table at [`/admin/outcomes.html#formulas`](https://mshadaab27.github.io/commerceiq-brain/admin/outcomes.html#formulas) is fully data-driven from this file — editing the registry updates both the table and the inspector.
+
+**Three formula treatments.** Not every alert can produce a $ number with the same confidence; the registry encodes that honestly:
+
+| Treatment | Schema | When |
+|---|---|---|
+| `primary` (+ optional `fallback`) | `at_risk_$ = expression` | Live alerts with observed inputs |
+| `demoted` | `{ demoted: true, reason, reconsider_when }` | The signal is downstream (e.g. BSR is an *output* of velocity, not a driver) — attempting $ would double-count |
+| `directional_only` | `{ v1_treatment, intended_formula, reason, reconsider_when }` | Inputs not productionized yet (e.g. SKU-level review sentiment, full SOV) — surface trend pill, no $ |
+
+**Four statuses, today's distribution (n=11):** `live` (5) · `canary` (3) · `demoted` (1) · `directional_only` (2).
+
+**Reason coefficients** — share of lift we credit ourselves, inherited by every playbook + formula. Promotion from canary requires three+ outcomes within ±15% of band; demotion happens automatically if the rolling-30 accuracy degrades past threshold.
+
+| Reason | Coefficient | Confidence | Used by |
+|---|---:|---:|---|
+| Inventory | 1.00 | 0.95 | 1 formula · 1 playbook |
+| BuyBox | 0.85 | 0.90 | 1 formula · 1 playbook |
+| Shipping | 0.85 | 0.90 | 1 formula |
+| Promo | 0.80 | 0.85 | 2 formulas · 2 playbooks |
+| Content | 0.65 | 0.70 | 1 formula · 1 playbook |
+| Media | 0.60 | 0.85 | 3 formulas · 1 playbook |
+
+**Attribution boundary.** Revenue decomposes as `Revenue = Units × ASP` and `Units = Glance Views × Conversion`. We never claim $ attribution *below* the GV / CVR / ASP layer; every formula's `primary_metric` is one of `GV`, `CVR`, `ASP`, or `OOS_binary`. The 80% Key Contributor rule says: when multiple factors move at once, credit goes to the factor whose Shapley share exceeds 80% — otherwise the outcome stays in a multi-driver bucket. Reason coefficients then discount that share to what we actually caused vs. what would have moved anyway.
+
+**Measurement window:** 14-day pre-period, 7-day post-period, synthetic-control donor pool of similar SKUs. Each formula records its `validation` block (`outcomes_count`, `accuracy_band`, `accuracy_pct`, `mean_abs_pct_error`, `bias`, `last_refresh`) so the admin Impact Formulas table can show rolling accuracy at a glance.
+
+See the full spec in [`docs/brainstorms/2026-05-26-alert-impact-calculation-requirements.md`](https://github.com/mshadaab27/commerceiq-brain/blob/main/docs/brainstorms/2026-05-26-alert-impact-calculation-requirements.md) and the rollout / UX plan in [`docs/brainstorms/2026-05-26-impact-tracking-ux-and-platform-plan.md`](https://github.com/mshadaab27/commerceiq-brain/blob/main/docs/brainstorms/2026-05-26-impact-tracking-ux-and-platform-plan.md).
+
 **Mockups:**
-- [`/actions.html`](https://mshadaab27.github.io/commerceiq-brain/actions.html) — customer view (in-flight actions with sparklines)
-- [`/admin/outcomes.html`](https://mshadaab27.github.io/commerceiq-brain/admin/outcomes.html) — admin view (cross-tenant action log with methodology audit and belief Δ)
+- [`/actions.html`](https://mshadaab27.github.io/commerceiq-brain/actions.html) — customer view (in-flight actions with predicted-vs-realized band)
+- [`/admin/outcomes.html#formulas`](https://mshadaab27.github.io/commerceiq-brain/admin/outcomes.html#formulas) — data-driven formula registry + inspector
 
 ### L6 — Adaptation (rules that rewrite the system)
 
@@ -347,6 +380,8 @@ A single principle structures the entire UI: **BRAIN's complexity belongs backst
 - Subtitle: *"your fix is working: +9.2% so far"* (outcome loop)
 - Subtitle: *"repeat pattern, 3× this quarter"* (memory surfacing)
 - Hero sentence: BRAIN-synthesized ("Most of it (73%) is in Ice Cream Maker.")
+- **Predicted-vs-realized band**: *"$54K → +$58K · +8% within band ✅"* (outcome accuracy at a glance — see §5 impact-formula framework)
+- **Driver pill**: *"Conversion 82%"* (which factor moved most of the lift — attribution surfaced as a single chip, not a table)
 
 **Invisible by design:** router decisions, agent execution traces, KG edge weights, confidence scores, learning meters, the Composer itself.
 
@@ -363,13 +398,20 @@ A single principle structures the entire UI: **BRAIN's complexity belongs backst
               │  ─ L2 Skill Studio  (DAG)              │
               │  ─ L3 Orchestrate                      │
               │  ─ L5 Outcomes                         │
+              │     └─ Playbooks      (6)              │
+              │     └─ Outcomes       (14)             │
+              │     └─ Impact formulas (8)             │
+              │     └─ Coefficients   (6)              │
+              │     └─ Reviews        (3)              │
               │  ─ L6 Adapt                            │
               └───────────────────────────────────────┘
 ```
 
-**Designed around the natural unit of work for a PM/CS/FDE: the layer.**
+**Designed around the natural unit of work for a PM/CS/FDE: the layer — with each layer page shaped as a *platform* of sub-resources, not a static dashboard.**
 
-A sidebar with the 6 BRAIN layers, badges showing each layer's count, and per-page operator UIs. Different visual treatment: denser grids, sidebar nav, monospace font for IDs and SQL.
+The sidebar lists the 6 BRAIN layers; each layer page (notably L5 Outcomes) follows a Linear-style resource model: sub-resources nested in the sidenav, scan-and-drill master-detail layout (table on the left, inspector on the right), and a slim header with breadcrumbs + actions. Click a row in any sub-resource and the right-hand inspector fills with that record's full context. Same shape repeats across Playbooks, Outcomes, Impact formulas, Coefficients, and Reviews — one learnable pattern, five entities.
+
+Denser grids, monospace IDs, status pills (`live` / `canary` / `demoted` / `draft`), and inline mini-stats live across all admin pages.
 
 ### 4.3 Why the split matters
 
@@ -533,6 +575,22 @@ brain_context        (id, scope, scope_id, type, content, embedding,
 brain_drafts         (id, author_user_id, draft_type, status, payload,
                       generated_artifacts, tenant_scope,
                       approved_by, approved_at)
+
+-- Impact-formula framework (see §5 Impact-formula framework)
+brain_alert_formulas    (id, alert_type, primary_metric, reason_category,
+                         reason_coefficient, status, version, formula_jsonb,
+                         scope, published_at, deprecated_at)
+brain_formula_constants (id, formula_id, name, value, unit, source, last_refresh,
+                         confidence)
+brain_impact_predictions(id, alert_id, formula_id, formula_version, sku,
+                         predicted_at_risk_$, predicted_lift_band,
+                         primary_metric, predicted_at, window_days)
+brain_impact_actuals    (id, prediction_id, action_id, measurement_method,
+                         actual_metric_value, counterfactual_value,
+                         observed_lift, within_band, measured_at)
+brain_formula_accuracy  (formula_id, rolling_window_days, outcomes_count,
+                         within_band_count, accuracy_pct,
+                         mean_abs_pct_error, bias, last_refresh)
 ```
 
 See [Appendix](#14-appendix--data-shapes) for full schemas.
@@ -603,8 +661,21 @@ Click any link to open that page in the live mockup. All pages share one design 
 | [Composer](https://mshadaab27.github.io/commerceiq-brain/admin/composer.html) | L2 | NL → use case 3-step wizard |
 | [Skill Studio](https://mshadaab27.github.io/commerceiq-brain/admin/studio.html) | L2 | Visual DAG editor |
 | [Orchestrate](https://mshadaab27.github.io/commerceiq-brain/admin/orchestrate.html) | L3 | Router decision feed + novel mining |
-| [Outcomes](https://mshadaab27.github.io/commerceiq-brain/admin/outcomes.html) | L5 | Cross-tenant action log + methodology audit |
+| [Outcomes · Playbooks](https://mshadaab27.github.io/commerceiq-brain/admin/outcomes.html#playbooks) | L5 | Authored action playbooks with criteria + worked-rate |
+| [Outcomes · Impact formulas](https://mshadaab27.github.io/commerceiq-brain/admin/outcomes.html#formulas) | L5 | Data-driven formula registry + inspector (live / canary / demoted / directional) |
+| [Outcomes · Coefficients](https://mshadaab27.github.io/commerceiq-brain/admin/outcomes.html#coefficients) | L5 | Six reason coefficients with scope + last-refresh |
+| [Outcomes · Reviews](https://mshadaab27.github.io/commerceiq-brain/admin/outcomes.html#reviews) | L5 | Pending system-proposed refinements (canary queue) |
 | [Adapt](https://mshadaab27.github.io/commerceiq-brain/admin/adapt.html) | L6 | 6 learning loops + pending review queue |
+
+### Source-of-truth artifacts
+
+The registry and the brainstorm docs travel with the mockup. They are the durable record of *what* the framework computes and *how* the platform plans to build it.
+
+| Artifact | Role |
+|---|---|
+| [`assets/formulas.js`](https://github.com/mshadaab27/commerceiq-brain/blob/main/assets/formulas.js) | Source of truth for all 11 alert impact formulas. The admin table renders directly from this file. |
+| [`docs/brainstorms/2026-05-26-alert-impact-calculation-requirements.md`](https://github.com/mshadaab27/commerceiq-brain/blob/main/docs/brainstorms/2026-05-26-alert-impact-calculation-requirements.md) | Requirements doc: what the framework computes (per-alert specs, three exception patterns, 80% Key Contributor rule). |
+| [`docs/brainstorms/2026-05-26-impact-tracking-ux-and-platform-plan.md`](https://github.com/mshadaab27/commerceiq-brain/blob/main/docs/brainstorms/2026-05-26-impact-tracking-ux-and-platform-plan.md) | UX + platform plan: customer accuracy band, admin formula registry, 5 new tables, 4-phase rollout. |
 
 ---
 
@@ -617,6 +688,7 @@ Incremental — no big bang. Each phase ships value on its own.
 | **0 — Foundations** | New brain tables, scope resolution, KG seed from current use cases/constraints | Required by everything else; no user-visible change |
 | **1 — Composer (MVP)** | NL→use case generator using query planner; review UI; auto-seed to existing tables | Immediate wins — PMs unblocked from engineering for new use cases |
 | **2 — Outcome tracking** | Action log + measurement job + KG belief updates | The "did it work" loop that makes the system actually learn |
+| **2b — Impact-formula framework** | Hardcoded registry → accuracy visibility → admin-editable formulas → auto-recalibration via L6. See [impact-tracking UX + platform plan](https://github.com/mshadaab27/commerceiq-brain/blob/main/docs/brainstorms/2026-05-26-impact-tracking-ux-and-platform-plan.md) | Sub-phase of #2 — makes "predicted lift" trustworthy before customers act on it |
 | **3 — Router (advisory mode)** | Router runs in shadow alongside today's prompt-based routing, logs disagreements | Gather training signal without behavior change |
 | **4 — Router (live)** | Promote Router to control plane, deprecate Mode-1/Mode-2 prompt branching | Now cross-agent investigations are possible |
 | **5 — Skill Studio + Context** | Visual skill composer + user/tenant/thread context injection | Productizes the authoring surface fully |
@@ -633,7 +705,7 @@ Things the design intentionally leaves to be decided by stakeholders:
 3. **KG promotion governance.** When does a learned link at `client:1360` graduate to `global`? Manual? Threshold + sign-off? Auto?
 4. **Router latency budget.** Adding a meta-agent adds ~1–2s. For high-frequency questions (CSMs in Slack), is that acceptable, or do we need a fast-path bypass for cached question types?
 5. **Personalization vs. surprise.** A heavily personalized BRAIN might never show a CSM the factor they didn't know mattered. How much exploration do we force?
-6. **Outcome attribution boundary.** If a customer fixes the deal badge AND increases ad spend in the same week, how do we attribute the lift?
+6. **Outcome attribution boundary.** Partially answered (§5 impact-formula framework): no $ attribution below the GV/CVR/ASP layer, reason coefficients discount our share, the 80% Key Contributor rule routes mixed outcomes to a multi-driver bucket. Still open: when two formulas fire on the same SKU in overlapping windows, do we use pairwise Shapley decomposition or sequential credit assignment?
 7. **Privacy / data residency.** Does episodic memory from EU clients ever cross into the global KG? Where does it live?
 
 ---
