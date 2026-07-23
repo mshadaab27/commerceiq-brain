@@ -1,4 +1,5 @@
 # CIQ Brain — Mockup
+[![pages-build-deployment](https://github.com/mshadaab27/commerceiq-brain/actions/workflows/pages/pages-build-deployment/badge.svg)](https://github.com/mshadaab27/commerceiq-brain/actions/workflows/pages/pages-build-deployment)
 
 A design prototype for a **Brain-like reasoning, memory, and learning layer** on top of the CommerceIQ agent platform. Two surfaces, one substrate:
 
